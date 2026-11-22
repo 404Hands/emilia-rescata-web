@@ -1,0 +1,57 @@
+:host{
+    --color-header-fondo: #FFE7E5;
+    --color-header-boton-volver: #F8C3BE;
+    --color-header-letras: #3C3131;
+}
+
+header{
+    background-color: var(--color-header-fondo);
+    padding: 10px 20px;
+}
+
+.caja-logo{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo{
+    width: 48px;
+    height: 59px;
+}
+
+.nombre-header{
+    color: var(--color-header-letras);
+    font-weight: bold;
+    margin: 0;
+}
+
+.descripcion-header{
+    color: var(--color-header-letras);
+    font-size: 14px;
+    margin: 0;
+}
+
+.boton-volver{
+    background-color: var(--color-header-boton-volver);
+    color: var(--color-header-letras);
+    min-height: 40px;
+    padding: 6px 15px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    font-size: 14px;
+}
+
+@media (max-width: 767px){
+    .caja-logo{
+        flex-direction: column;
+        gap: 5px;
+    }
+    .descripcion-header{
+        font-size: 13px;
+    }
+    .caja-boton-volver{
+        margin-top: 10px;
+    }
+}

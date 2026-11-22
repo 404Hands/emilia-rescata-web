@@ -1,0 +1,84 @@
+:host{
+    --color-fondo-estadisticas: #FFE7E5;
+    --color-borde-tarjeta: #E3A5A8;
+    --color-boton-mascotas: #55423E;
+    --color-nombre-mascota: #670502;
+    --color-boton-mascotas-hover: #3D2F2C;
+}
+
+.estadisticas{
+    background-color: var(--color-fondo-estadisticas);
+    padding: 25px 0 10px 0;
+}
+
+.cuadro-estadistica{
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 12px 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.titulo-estadistica{
+    font-size: 13px;
+    margin: 0;
+}
+
+.cuadro-estadistica h4{
+    font-weight: bold;
+    margin: 0;
+}
+
+.lista-mascotas{
+    padding: 40px 0;
+}
+
+.tarjeta{
+    border: 2px solid var(--color-borde-tarjeta);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+}
+
+.foto-perro{
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.tarjeta h5{
+    color: var(--color-nombre-mascota);
+    font-weight: bold;
+    margin: 10px 0 0 0;
+}
+
+.tarjeta p{
+    font-size: 12px;
+    margin: 0;
+}
+
+.boton-ver-mas{
+    background-color: var(--color-boton-mascotas);
+    color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid var(--color-boton-mascotas);
+    padding: 8px 30px;
+    margin-top: 20px;
+}
+
+.boton-adoptar{
+    background-color: var(--color-boton-mascotas);
+    color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid var(--color-boton-mascotas);
+    padding: 6px 25px;
+    margin-top: 10px;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.boton-adoptar:hover{
+    background-color: var(--color-boton-mascotas-hover);
+    border-color: var(--color-boton-mascotas-hover);
+    transform: scale(1.08);
+}

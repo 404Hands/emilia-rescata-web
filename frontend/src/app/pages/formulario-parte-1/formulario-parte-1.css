@@ -1,0 +1,168 @@
+:host{
+    --color-formulario-fondo: #F6CCC9;
+    --color-formulario-fondo-degradado: #FFE7E5;
+    --color-formulario-circulos: #FFBEC1;
+    --color-formulario-boton: #FFC0BC;
+    --color-formulario-boton-hover: #FFA9A4;
+    --color-formulario-letras: #3C3131;
+}
+
+main{
+    background: linear-gradient(to bottom, var(--color-formulario-fondo), var(--color-formulario-fondo-degradado));
+    min-height: 100vh;
+    padding: 30px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+main::before{
+    content: "";
+    position: absolute;
+    top: -120px;
+    left: -120px;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    background-color: var(--color-formulario-circulos);
+    opacity: 0.4;
+}
+
+main::after{
+    content: "";
+    position: absolute;
+    bottom: -150px;
+    right: -150px;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background-color: var(--color-formulario-circulos);
+    opacity: 0.4;
+}
+
+.container{
+    position: relative;
+    z-index: 1;
+}
+
+.caja-volver{
+    font-size: 28px;
+}
+
+.caja-volver a{
+    text-decoration: none;
+    color: var(--color-formulario-letras);
+    transition: color 0.3s;
+}
+
+.caja-volver a:hover{
+    color: var(--color-formulario-boton-hover);
+}
+
+.caja-titulo{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo{
+    width: 90px;
+}
+
+.caja-titulo h2{
+    color: var(--color-formulario-letras);
+    margin: 5px 0 0 0;
+}
+
+.tarjeta-formulario{
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 30px 20px 40px 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.pasos{
+    display: flex;
+    align-items: center;
+}
+
+.circulo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border: 3px solid var(--color-formulario-circulos);
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 20px;
+    color: var(--color-formulario-letras);
+}
+
+.activo{
+    background-color: var(--color-formulario-circulos);
+}
+
+.linea{
+    flex: 1;
+    height: 3px;
+    background-color: var(--color-formulario-circulos);
+}
+
+.subtitulo{
+    text-align: center;
+    color: var(--color-formulario-letras);
+    margin: 25px 0;
+}
+
+.campos{
+    padding: 0 30px;
+}
+
+label{
+    font-size: 13px;
+    color: var(--color-formulario-letras);
+}
+
+.form-control{
+    border: 1px solid var(--color-formulario-letras);
+    border-radius: 6px;
+}
+
+.form-control:focus{
+    border-color: var(--color-formulario-circulos);
+    box-shadow: 0 0 0 0.2rem rgba(255, 190, 193, 0.5);
+}
+
+.boton-siguiente{
+    background-color: var(--color-formulario-boton);
+    color: var(--color-formulario-letras);
+    border-color: var(--color-formulario-boton);
+    font-size: 12px;
+    margin-top: 25px;
+    transition: background-color 0.3s;
+}
+
+.boton-siguiente:hover{
+    background-color: var(--color-formulario-boton-hover);
+    border-color: var(--color-formulario-boton-hover);
+    color: var(--color-formulario-letras);
+}
+
+@media (max-width: 767px){
+    .campos{
+        padding: 0;
+    }
+    main::before{
+        width: 220px;
+        height: 220px;
+        top: -90px;
+        left: -90px;
+    }
+    main::after{
+        width: 250px;
+        height: 250px;
+        bottom: -100px;
+        right: -100px;
+    }
+}
