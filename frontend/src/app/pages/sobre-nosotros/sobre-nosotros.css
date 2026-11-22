@@ -1,0 +1,147 @@
+:host {
+    --color-rosado: #FDDDD6;
+    --color-principal: #670502;
+    --color-azul: #4779A2;
+    --color-oscuro: #282247;
+    --color-blanco: #FFFFFF;
+    --color-negro: #161616;
+}
+
+main {
+    color: var(--color-negro);
+    background-color: var(--color-blanco);
+}
+
+main p {
+    text-align: justify;
+    color: var(--color-negro);
+    font-size: 1.25rem;
+}
+
+main h2,
+main h3,
+main h4,
+main h5 {
+    color: var(--color-negro);
+}
+
+main a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+main a:hover {
+    color: var(--color-principal);
+}
+
+#portada {
+    background-color: var(--color-blanco);
+}
+
+#mision,
+#historia {
+    background-color: var(--color-blanco);
+}
+
+#mision h2,
+#historia h2 {
+    color: var(--color-negro);
+    font-weight: bold;
+}
+
+#mision strong,
+#historia strong {
+    color: var(--color-negro);
+}
+
+#comentarios {
+    background-color: var(--color-blanco);
+}
+
+#comentarios h2 {
+    color: var(--color-negro);
+    font-weight: bold;
+}
+
+#comentario1,
+#comentario2,
+#comentario3,
+#comentario4 {
+    background-color: var(--color-rosado);
+}
+
+#comentarios h5 {
+    color: var(--color-principal);
+    font-weight: bold;
+}
+
+#comentarios p {
+    color: var(--color-oscuro);
+    text-align: center;
+    font-size: 1rem;
+}
+
+#premios,
+#reconocimiento {
+    background-color: var(--color-rosado);
+}
+
+#premios h2 {
+    color: var(--color-principal);
+    font-size: calc(1.5rem + 1.2vw);
+    font-weight: bold;
+}
+
+#premios h3,
+#reconocimiento h3 {
+    color: var(--color-negro);
+    font-size: calc(1.3rem + 0.6vw);
+    font-weight: bold;
+}
+
+#carrusel-premios {
+    max-width: 400px;
+}
+
+#carrusel-premios .carousel-item img,
+#carrusel-premios .carousel-item video {
+    width: 100%;
+    height: 440px;
+    object-fit: cover;
+    display: block;
+}
+
+#notas {
+    background-color: var(--color-blanco);
+}
+
+#notas h2 {
+    color: var(--color-negro);
+    font-weight: bold;
+}
+
+#notas>p {
+    color: var(--color-negro);
+    font-size: 1.25rem;
+}
+
+#nota1,
+#nota2,
+#nota3,
+#nota4 {
+    background-color: var(--color-azul);
+}
+
+#notas img {
+    width: 100%;
+    height: 290px;
+    object-fit: cover;
+    display: block;
+}
+
+@media (max-width: 767px) {
+    #notas img {
+        height: 230px;
+    }
+}
