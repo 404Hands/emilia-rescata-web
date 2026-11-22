@@ -1,0 +1,136 @@
+:host {
+    --color-rosado: #FDDDD6;
+    --color-principal: #670502;
+    --color-azul: #4779A2;
+    --color-oscuro: #282247;
+    --color-blanco: #FFFFFF;
+    --color-negro: #161616;
+}
+
+main,
+aside {
+    color: var(--color-oscuro);
+    background-color: var(--color-blanco);
+}
+
+main p,
+aside p {
+    text-align: justify;
+}
+
+main h2,
+main h3,
+main h4,
+aside h2,
+aside h3,
+aside h4 {
+    color: var(--color-oscuro);
+}
+
+#portada {
+    background-color: var(--color-blanco);
+}
+
+#portada .carousel img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+#objetivos {
+    background-color: var(--color-blanco);
+}
+
+#objetivos h2,
+#objetivos p {
+    color: var(--color-negro);
+}
+
+#objetivos #frase {
+    background-color: var(--color-rosado);
+    color: var(--color-principal);
+}
+
+#voluntariado {
+    background-color: var(--color-rosado);
+}
+
+#tituloVoluntario {
+    color: var(--color-principal);
+}
+
+#textoVoluntario {
+    color: var(--color-oscuro);
+    text-align: center;
+}
+
+#botonVoluntario {
+    --bs-btn-bg: var(--color-principal);
+    --bs-btn-color: var(--color-blanco);
+    --bs-btn-border-color: var(--color-principal);
+
+    --bs-btn-hover-bg: var(--color-oscuro);
+    --bs-btn-hover-color: var(--color-blanco);
+    --bs-btn-hover-border-color: var(--color-oscuro);
+
+    --bs-btn-active-bg: var(--color-oscuro);
+    --bs-btn-active-color: var(--color-blanco);
+
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+#cuidado {
+    background-color: var(--color-blanco);
+}
+
+#cuidado h2,
+#cuidado p {
+    color: var(--color-negro);
+}
+
+#impacto {
+    background-color: var(--color-blanco);
+}
+
+#impacto h3 {
+    background-color: var(--color-azul);
+    color: var(--color-blanco);
+}
+
+#impacto article {
+    color: var(--color-oscuro);
+}
+
+#impacto article h4 {
+    color: var(--color-oscuro);
+    font-weight: bold;
+}
+
+aside {
+    background-color: var(--color-rosado);
+    color: var(--color-oscuro);
+}
+
+#objetivos img,
+#cuidado img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+}
+
+#voluntariado img {
+    max-width: 780px;
+    width: 100%;
+    height: auto;
+}
+
+#impacto img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media (max-width: 767px) {
+    #impacto article {
+        margin-top: 0 !important;
+    }
+}
