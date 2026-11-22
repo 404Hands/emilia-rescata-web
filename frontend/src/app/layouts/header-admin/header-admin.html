@@ -1,0 +1,55 @@
+<header class="barra-admin">
+    <nav class="barra-contenido container-fluid" aria-label="Navegación de administración">
+
+  
+        <a class="marca" routerLink="/panel-general" aria-label="Ir al panel general">
+            <img src="assets/HEADER_LOGO.png" alt="Emilia Rescata" class="marca-logo">
+        </a>
+
+     
+        <ul class="enlaces list-unstyled mb-0">
+            <li>
+                <a routerLink="/panel-general" routerLinkActive="activo" ariaCurrentWhenActive="page">
+                    Panel General
+                </a>
+            </li>
+            <li>
+                <a routerLink="/adopciones" routerLinkActive="activo" ariaCurrentWhenActive="page">
+                    Adopciones
+                </a>
+            </li>
+            <li>
+                <a routerLink="/comida-recursos" routerLinkActive="activo" ariaCurrentWhenActive="page">
+                    Comida y Recursos
+                </a>
+            </li>
+        </ul>
+
+        <div class="acciones">
+            @if (usuario(); as cuenta) {
+            <div class="cuenta">
+                @if (cuenta.fotoUrl) {
+                <img [src]="cuenta.fotoUrl" alt="" class="cuenta-foto">
+                } @else {
+                <span class="cuenta-inicial" aria-hidden="true">
+                    {{ cuenta.nombre.charAt(0) }}
+                </span>
+                }
+
+                <div class="cuenta-datos">
+                    <strong>{{ cuenta.nombre }}</strong>
+                    <small>{{ cuenta.rol }}</small>
+                </div>
+            </div>
+
+            <button type="button" class="btn boton-salir" (click)="salidaSolicitada.emit()">
+                Cerrar sesión
+            </button>
+            } @else {
+            <a routerLink="/iniciar-sesion" class="btn boton-salir">
+                Iniciar sesión
+            </a>
+            }
+        </div>
+    </nav>
+</header>

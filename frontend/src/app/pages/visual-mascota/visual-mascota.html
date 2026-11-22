@@ -1,0 +1,328 @@
+<main class="ficha-adopcion container-fluid">
+  <div class="ficha-contenedor mx-auto">
+    <form
+      class="ficha-mascota"
+      aria-labelledby="titulo-ficha"
+      novalidate
+      (submit)="prepararPublicacion($event)"
+    >
+      <h1 id="titulo-ficha" class="visually-hidden">
+        Registrar mascota en adopción
+      </h1>
+
+      <div class="row gx-md-4 gx-lg-5 gy-4">
+
+        <!-- Columna izquierda: fotos e historia -->
+        <div class="col-12 col-md-5">
+          <fieldset class="fotos-mascota">
+            <legend class="visually-hidden">Fotos de la mascota</legend>
+
+            <!-- Foto principal -->
+            <input
+              id="foto-principal"
+              type="file"
+              accept="image/*"
+              class="visually-hidden"
+              required
+              (change)="seleccionarFoto($event, 0)"
+            >
+
+            <label
+              for="foto-principal"
+              class="btn d-block position-relative p-0 border-0 rounded-3 overflow-hidden"
+            >
+              <span class="ratio ratio-1x1 d-block">
+                <img
+                  [src]="fotos()[0]?.vistaPrevia ?? fotoReferencia"
+                  [alt]="fotos()[0] ? 'Foto principal seleccionada' : 'Foto de referencia'"
+                >
+              </span>
+
+              <span
+                class="position-absolute bottom-0 start-0 w-100 bg-dark text-white py-2"
+              >
+                {{ fotos()[0] ? 'Cambiar foto principal' : 'Elegir foto principal' }}
+              </span>
+            </label>
+
+            <!-- Tres fotos adicionales -->
+            <div class="row row-cols-3 g-2 mt-1">
+              @for (posicion of posicionesExtra; track posicion) {
+                <div class="col">
+                  <input
+                    [id]="'foto-extra-' + posicion"
+                    type="file"
+                    accept="image/*"
+                    class="visually-hidden"
+                    (change)="seleccionarFoto($event, posicion)"
+                  >
+
+                  <div class="ratio ratio-1x1">
+                    <label
+                      [attr.for]="'foto-extra-' + posicion"
+                      [attr.aria-label]="'Elegir foto adicional ' + posicion"
+                      class="btn d-flex flex-column align-items-center justify-content-center
+                             p-0 rounded-3 overflow-hidden"
+                    >
+                      @if (fotos()[posicion]; as foto) {
+                        <img
+                          [src]="foto.vistaPrevia"
+                          [alt]="'Foto adicional ' + posicion"
+                        >
+                      } @else {
+                        <span class="fs-4" aria-hidden="true">+</span>
+                        <small>Foto {{ posicion }}</small>
+                      }
+                    </label>
+                  </div>
+                </div>
+              }
+            </div>
+          </fieldset>
+
+          <div class="historia-mascota">
+            <label for="historia" class="form-label fw-bold fs-4">
+              Mi historia
+            </label>
+
+            <textarea
+              id="historia"
+              class="form-control"
+              rows="6"
+              placeholder="Cuenta cómo llegó al refugio y qué le gusta hacer."
+              [formField]="ficha.historia"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Columna derecha: datos editables -->
+        <div class="col-12 col-md-7">
+          <label for="nombre-mascota" class="form-label">
+            Nombre de la mascota
+          </label>
+
+          <input
+            id="nombre-mascota"
+            type="text"
+            class="form-control fw-bold fs-1 mb-3"
+            placeholder="Escribe el nombre"
+            [formField]="ficha.nombre"
+          >
+
+          <div class="row g-3">
+            <div class="col-6">
+              <label for="raza" class="form-label">Raza</label>
+
+              <input
+                id="raza"
+                type="text"
+                class="form-control dato-valor"
+                placeholder="Escribe la raza"
+                [formField]="ficha.raza"
+              >
+            </div>
+
+            <div class="col-6">
+              <label for="edad" class="form-label">Edad en años</label>
+
+              <input
+                id="edad"
+                type="number"
+                class="form-control dato-valor"
+                placeholder="Ingresa la edad"
+                [formField]="ficha.edad"
+              >
+            </div>
+          </div>
+
+          <!-- Sexo -->
+          <fieldset class="grupo-ficha mt-3">
+            <legend class="fs-6 fw-semibold">Sexo</legend>
+
+            <div class="d-flex gap-2">
+              <input
+                id="sexo-macho"
+                type="radio"
+                class="btn-check"
+                value="macho"
+                [formField]="ficha.sexo"
+              >
+              <label for="sexo-macho" class="btn flex-fill">Macho</label>
+
+              <input
+                id="sexo-hembra"
+                type="radio"
+                class="btn-check"
+                value="hembra"
+                [formField]="ficha.sexo"
+              >
+              <label for="sexo-hembra" class="btn flex-fill">Hembra</label>
+            </div>
+          </fieldset>
+
+          <!-- Tamaño -->
+          <fieldset class="grupo-ficha mt-3">
+            <legend class="fs-6 fw-semibold">Tamaño del perro</legend>
+
+            <div class="opciones-tamano d-flex gap-2">
+              <input
+                id="tamano-pequeno"
+                type="radio"
+                class="btn-check"
+                value="pequeno"
+                [formField]="ficha.tamano"
+              >
+              <label for="tamano-pequeno" class="btn tarjeta-tamano">
+                <strong>Pequeño</strong>
+                <small>&lt; 10 kg</small>
+              </label>
+
+              <input
+                id="tamano-mediano"
+                type="radio"
+                class="btn-check"
+                value="mediano"
+                [formField]="ficha.tamano"
+              >
+              <label for="tamano-mediano" class="btn tarjeta-tamano">
+                <strong>Mediano</strong>
+                <small>10–25 kg</small>
+              </label>
+
+              <input
+                id="tamano-grande"
+                type="radio"
+                class="btn-check"
+                value="grande"
+                [formField]="ficha.tamano"
+              >
+              <label for="tamano-grande" class="btn tarjeta-tamano">
+                <strong>Grande</strong>
+                <small>&gt; 25 kg</small>
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- Estado de salud -->
+          <fieldset class="grupo-ficha mt-3">
+            <legend class="fs-6 fw-semibold">Estado de salud</legend>
+
+            <div class="opciones-salud">
+              <label class="tarjeta-salud">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  [formField]="ficha.vacunado"
+                >
+                <span>
+                  <strong>Vacunado</strong>
+                  <small class="d-block">Carnet al día</small>
+                </span>
+              </label>
+
+              <label class="tarjeta-salud">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  [formField]="ficha.desparasitado"
+                >
+                <span>
+                  <strong>Desparasitado</strong>
+                  <small class="d-block">Interno / externo</small>
+                </span>
+              </label>
+
+              <label class="tarjeta-salud">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  [formField]="ficha.esterilizado"
+                >
+                <strong>Esterilizado</strong>
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- Rasgos de personalidad -->
+          <fieldset class="grupo-ficha mt-3">
+            <legend class="fs-6 fw-semibold">¿Cómo soy?</legend>
+
+            <div class="rasgos-mascota">
+              <input
+                id="amigable"
+                type="checkbox"
+                class="btn-check"
+                [formField]="ficha.rasgos.amigable"
+              >
+              <label for="amigable" class="btn rasgo">Amigable</label>
+
+              <input
+                id="jugueton"
+                type="checkbox"
+                class="btn-check"
+                [formField]="ficha.rasgos.jugueton"
+              >
+              <label for="jugueton" class="btn rasgo">Juguetón</label>
+
+              <input
+                id="timido"
+                type="checkbox"
+                class="btn-check"
+                [formField]="ficha.rasgos.timido"
+              >
+              <label for="timido" class="btn rasgo">Tímido</label>
+
+              <input
+                id="carinoso"
+                type="checkbox"
+                class="btn-check"
+                [formField]="ficha.rasgos.carinoso"
+              >
+              <label for="carinoso" class="btn rasgo">Cariñoso</label>
+
+              <input
+                id="protector"
+                type="checkbox"
+                class="btn-check"
+                [formField]="ficha.rasgos.protector"
+              >
+              <label for="protector" class="btn rasgo">Protector</label>
+
+              <input
+                id="obediente"
+                type="checkbox"
+                class="btn-check"
+                [formField]="ficha.rasgos.obediente"
+              >
+              <label for="obediente" class="btn rasgo">Obediente</label>
+
+              <input
+                id="tranquilo"
+                type="checkbox"
+                class="btn-check"
+                [formField]="ficha.rasgos.tranquilo"
+              >
+              <label for="tranquilo" class="btn rasgo">Tranquilo</label>
+
+              <input
+                id="inteligente"
+                type="checkbox"
+                class="btn-check"
+                [formField]="ficha.rasgos.inteligente"
+              >
+              <label for="inteligente" class="btn rasgo">Inteligente</label>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="accion-publicar text-center mt-4">
+        <button type="submit" class="btn boton-publicar">
+          Publicar en la página principal
+        </button>
+
+        <p class="mt-2 mb-0" role="status">{{ mensaje() }}</p>
+      </div>
+    </form>
+  </div>
+</main>
