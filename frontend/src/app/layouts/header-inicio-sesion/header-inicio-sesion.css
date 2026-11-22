@@ -2,6 +2,8 @@
     --color-header-fondo: #FFE7E5;
     --color-header-boton-volver: #F8C3BE;
     --color-header-letras: #3C3131;
+    --color-header-boton-volver-hover: #fdbdb7;
+
 }
 
 header{
@@ -41,7 +43,16 @@ header{
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
     font-size: 14px;
+    transition: background-color 0.3s, transform 0.3s;
 }
+
+.boton-volver:hover{
+    background-color: var(--color-header-boton-volver-hover);
+    transform: scale(1.05);
+}
+
+
+
 
 @media (max-width: 767px){
     .caja-logo{

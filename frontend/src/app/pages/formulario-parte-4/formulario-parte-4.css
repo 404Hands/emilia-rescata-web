@@ -82,13 +82,14 @@ main::after{
     color: var(--color-formulario-letras);
     border-color: var(--color-formulario-boton);
     font-size: 12px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.3s;
 }
 
 .boton-formulario:hover{
     background-color: var(--color-formulario-boton-hover);
     border-color: var(--color-formulario-boton-hover);
     color: var(--color-formulario-letras);
+    transform: scale(1.05);
 }
 
 @media (max-width: 767px){

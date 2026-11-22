@@ -23,11 +23,21 @@ footer{
 .logo-texto{
     width: 100%;
     max-width: 260px;
+    transition: transform 0.3s;
+}
+
+.logo-texto:hover{
+    transform: scale(1.05);
 }
 
 .mascota-chica{
     width: 100%;
     max-width: 110px;
+    transition: transform 0.3s;
+}
+
+.mascota-chica:hover{
+    transform: scale(1.05);
 }
 
 .caja-mascota{
@@ -38,6 +48,11 @@ footer{
 .mascota{
     width: 100%;
     max-width: 150px;
+    transition: transform 0.3s;
+}
+
+.mascota:hover{
+    transform: scale(1.05);
 }
 
 .redes{
