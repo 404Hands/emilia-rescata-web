@@ -1,0 +1,61 @@
+<main>
+    <div class="container">
+
+        <div class="caja-borde">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-8">
+
+                    <form class="tarjeta-login">
+
+                        <div class="caja-icono">
+                            <img src="/assets/INICIO_SESION_LLAVE.png" alt="Llave" class="icono-llave">
+                        </div>
+
+                        <p class="texto-bienvenida">
+                            Bienvenida de nuevo. Ingresa tus credenciales para administrar a nuestros perritos y solicitudes.
+                        </p>
+
+                        <div class="mb-3">
+                            <div class="d-flex flex-wrap justify-content-between">
+                                <label for="correo">Correo electrónico</label>
+                                <small class="texto-autorizado">Personal autorizado</small>
+                            </div>
+                            <div class="input-group caja-input">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input type="email" id="correo" class="form-control" placeholder="EmiliaRescata@gmail.com" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="clave">Contraseña</label>
+                            <div class="input-group caja-input">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input [type]="mostrarClave ? 'text' : 'password'" id="clave" class="form-control" placeholder="••••••••••••" required>
+                                <span class="input-group-text ojo" (click)="mostrarClave = !mostrarClave">
+                                    <i class="bi" [class.bi-eye]="!mostrarClave" [class.bi-eye-slash]="mostrarClave"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
+                            <div class="form-check">
+                                <input type="checkbox" id="recordar" class="form-check-input">
+                                <label for="recordar" class="form-check-label">Recordar sesión</label>
+                            </div>
+                            <a href="#" class="olvidaste">¿Olvidaste tu contraseña?</a>
+                        </div>
+
+                        <button type="submit" class="btn boton-login w-100">
+                            Iniciar Sesión <img src="/assets/INICIO_SESION_HUELLITA.png" alt="Patita" class="icono-patita">
+                        </button>
+
+                    </form>
+
+                </div>
+            </div>
+
+            <p class="frase">"Salvar a un animal no cambiará el mundo, pero cambiará su mundo entero."</p>
+        </div>
+
+    </div>
+</main>

@@ -1,0 +1,166 @@
+:host{
+    --color-footer-fondo: #F6CCC9;
+    --color-footer-fondo-derechos: #EEB3B1;
+    --color-footer-letras: #670502;
+    --color-footer-letras-hover: #3C3131;
+}
+
+footer{
+    background-color: var(--color-footer-fondo);
+    min-height: 20vh;
+}
+
+.parte-arriba{
+    padding: 30px 20px;
+}
+
+.caja-logos{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo-texto{
+    width: 100%;
+    max-width: 260px;
+    transition: transform 0.3s;
+}
+
+.logo-texto:hover{
+    transform: scale(1.05);
+}
+
+.mascota-chica{
+    width: 100%;
+    max-width: 110px;
+    transition: transform 0.3s;
+}
+
+.mascota-chica:hover{
+    transform: scale(1.05);
+}
+
+.caja-mascota{
+    justify-content: center;
+    align-items: center;
+}
+
+.mascota{
+    width: 100%;
+    max-width: 150px;
+    transition: transform 0.3s;
+}
+
+.mascota:hover{
+    transform: scale(1.05);
+}
+
+.redes{
+    margin-bottom: 15px;
+}
+
+.red{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.red i{
+    font-size: 22px;
+    color: var(--color-footer-letras);
+    display: inline-block;
+    transition: transform 0.3s;
+}
+
+.red:hover i{
+    transform: scale(1.2);
+}
+
+.red a{
+    font-weight: bold;
+    text-decoration: underline;
+    overflow-wrap: anywhere;
+}
+
+ul{
+    margin: 0;
+    padding: 0;
+}
+
+li{
+    list-style: none;
+}
+
+a{
+    display: inline-block;
+    text-decoration: none;
+    color: var(--color-footer-letras);
+    transition: color 0.3s, transform 0.3s;
+}
+
+a:hover{
+    color: var(--color-footer-letras-hover);
+    transform: scale(1.08);
+}
+
+.activo{
+    font-weight: bold;
+}
+
+.links-fila{
+    display: flex;
+    align-items: center;
+}
+
+.links-fila li{
+    padding: 0 15px;
+    line-height: 1;
+}
+
+.links-fila li:first-child{
+    padding-left: 0;
+}
+
+.links-fila li + li{
+    border-left: 3px solid var(--color-footer-letras);
+}
+
+.links-columnas{
+    column-count: 2;
+    column-gap: 40px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.links-columnas li{
+    text-align: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--color-footer-letras);
+    break-inside: avoid;
+}
+
+.links-columnas li:nth-child(3),
+.links-columnas li:nth-child(6){
+    border-bottom: none;
+}
+
+.derechos{
+    background-color: var(--color-footer-fondo-derechos);
+    color: var(--color-footer-letras);
+    text-align: center;
+    padding: 15px;
+}
+
+.derechos p{
+    margin: 0;
+}
+
+@media (max-width: 991px){
+    .logo-texto{
+        max-width: 200px;
+    }
+    .red a{
+        font-size: 13px;
+    }
+}
