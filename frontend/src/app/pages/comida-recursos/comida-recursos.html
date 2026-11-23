@@ -1,0 +1,188 @@
+<main class="recursos container-fluid">
+    <div class="contenido mx-auto">
+
+        <header class="panel cabecera">
+            <div>
+                <p class="cuidado mb-1">
+                    <svg class="icono-texto" aria-hidden="true">
+                        <use href="assets/iconos-recursos.svg#corazon"></use>
+                    </svg>
+                    Cuidado de los {{ inventario.perros }} perritos
+                </p>
+            </div>
+
+            <button type="button" class="btn boton-coral" (click)="irAlIngreso(selectorProducto)">
+                ⊕ Registrar llegada de comida
+            </button>
+        </header>
+
+        <!-- Resumen -->
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-md-6">
+                <section class="panel resumen resumen-comida">
+                    <span class="icono grande verde" aria-hidden="true">
+                        <svg class="icono-svg">
+                            <use href="assets/iconos-recursos.svg#disponible"></use>
+                        </svg>
+                    </span>
+                    <div>
+                        <h2 class="etiqueta">Comida disponible</h2>
+                        <p class="numero">{{ inventario.diasDisponibles() }} días de comida</p>
+                        <p class="descripcion mb-0">
+                            Quedan <strong>{{ inventario.totalKg() | number:'1.0-2' }} kg</strong>
+                            de alimento seco para los {{ inventario.perros }} perritos.
+                        </p>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <section class="panel resumen resumen-alerta">
+                    <span class="icono grande coral" aria-hidden="true">
+                        <svg class="icono-svg">
+                            <use href="assets/iconos-recursos.svg#alerta"></use>
+                        </svg>
+                    </span>
+                    <div class="flex-grow-1">
+                        <h2 class="etiqueta">Atención necesaria</h2>
+
+                        @if (inventario.faltantes().length) {
+                        <p class="fw-bold mb-1">Falta comprar pronto</p>
+                        <ul class="lista-alertas mb-0">
+                            @for (producto of inventario.faltantes(); track producto.id) {
+                            <li>{{ producto.nombre }}</li>
+                            }
+                        </ul>
+                        } @else {
+                        <p class="mb-0">Todas las provisiones están por encima del mínimo.</p>
+                        }
+                    </div>
+
+                    @if (inventario.faltantes().length) {
+                    <button type="button" class="enlace-alerta" (click)="verFaltantes(seccionProductos)">
+                        Ver qué falta →
+                    </button>
+                    }
+                </section>
+            </div>
+        </div>
+
+        <div class="row g-4 align-items-start">
+
+            <!-- Inventario -->
+            <section #seccionProductos tabindex="-1" class="col-12 col-lg-8" aria-labelledby="titulo-provisiones">
+                <div class="titulo-lista">
+                    <div>
+                        <h2 id="titulo-provisiones">¿Cómo están nuestras provisiones?</h2>
+                        <p class="descripcion mb-0">Usa los botones para sumar o retirar una unidad.</p>
+                    </div>
+
+                    @if (soloFaltantes()) {
+                    <button type="button" class="btn btn-sm boton-claro" (click)="soloFaltantes.set(false)">
+                        Ver todos
+                    </button>
+                    } @else {
+                    <span class="contador">{{ inventario.productos().length }} tipos</span>
+                    }
+                </div>
+
+                <ul class="lista-productos list-unstyled mb-0">
+                    @for (producto of productosVisibles(); track producto.id) {
+                    <li class="panel producto" [class.producto-bajo]="producto.cantidad <= producto.minimo">
+
+                        <span class="icono" aria-hidden="true">
+                            <svg class="icono-svg">
+                                <use [attr.href]="'assets/iconos-recursos.svg#' + producto.icono"></use>
+                            </svg>
+                        </span>
+
+                        <div class="datos-producto">
+                            <div class="nombre-estado">
+                                <h3>{{ producto.nombre }}</h3>
+                                <span class="estado">
+                                    {{ producto.cantidad === 0 ? 'Agotado' :
+                                    producto.cantidad <= producto.minimo ? 'Queda poco' : 'Suficiente' }} </span>
+                            </div>
+
+                            <p class="descripcion mb-0">
+                                <strong>
+                                    {{ producto.cantidad | number:'1.0-2' }}
+                                    {{ producto.cantidad === 1 ? producto.unidad : producto.plural }}
+                                </strong>
+                                @if (producto.kgPorUnidad; as peso) {
+                                ({{ producto.cantidad * peso | number:'1.0-2' }} kg en total)
+                                } @else {
+                                · {{ producto.detalle }}
+                                }
+                            </p>
+                        </div>
+
+                        <div class="acciones">
+                            <button type="button" class="btn boton-claro" [disabled]="producto.cantidad < 1"
+                                [attr.aria-label]="'Usar 1 ' + producto.unidad + ' de ' + producto.nombre"
+                                (click)="inventario.ajustar(producto.id, -1)">
+                                − Usar 1
+                            </button>
+
+                            <button type="button" class="btn boton-agregar"
+                                [attr.aria-label]="'Agregar 1 ' + producto.unidad + ' de ' + producto.nombre"
+                                (click)="inventario.ajustar(producto.id, 1)">
+                                + Agregar {{ producto.unidad }}
+                            </button>
+                        </div>
+                    </li>
+                    } @empty {
+                    <li class="panel p-3">Ya repusiste todos los productos que estaban bajos.</li>
+                    }
+                </ul>
+            </section>
+
+            <!-- Formulario de donación -->
+            <aside class="col-12 col-lg-4">
+                <form class="panel donacion" novalidate (submit)="guardarIngreso($event)">
+                    <h2>¿Llegó una donación?</h2>
+                    <p class="descripcion">Registra el producto y la cantidad recibida.</p>
+
+                    <label for="producto-donado" class="form-label">
+                        1. ¿Qué alimento o producto llegó?
+                    </label>
+                    <select #selectorProducto id="producto-donado" class="form-select mb-3"
+                        [value]="ingreso().productoId" (change)="cambiarProducto(selectorProducto.value)">
+                        @for (producto of inventario.productos(); track producto.id) {
+                        <option [value]="producto.id">{{ producto.nombre }}</option>
+                        }
+                    </select>
+
+                    <label for="cantidad-donada" class="form-label">
+                        2. ¿Qué cantidad llegó?
+                    </label>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <input id="cantidad-donada" type="number" step="any" class="form-control"
+                                placeholder="Cantidad" [formField]="formulario.cantidad">
+                        </div>
+                        <div class="col-6">
+                            <label for="unidad-donada" class="visually-hidden">Unidad de medida</label>
+                            <select id="unidad-donada" class="form-select" [formField]="formulario.unidad">
+                                <option value="envase">{{ productoElegido()?.plural }}</option>
+                                @if (productoElegido()?.kgPorUnidad) {
+                                <option value="kg">Kilos</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn boton-coral w-100 mt-3">
+                        Guardar ingreso
+                    </button>
+                    <p class="mensaje mb-0" role="status">{{ mensaje() }}</p>
+                </form>
+
+                <div class="agradecimiento mt-3">
+                    <strong>¡Gracias por cuidar de los perritos!</strong>
+                    <p class="mb-0">Cada donación ayuda a mantener su pancita llena.</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+</main>
