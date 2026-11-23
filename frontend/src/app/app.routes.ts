@@ -17,6 +17,7 @@ import { Donaciones } from './pages/donaciones/donaciones';
 import { VisualMascota } from './pages/visual-mascota/visual-mascota';
 import { LayoutAdministrar } from './layouts/layout-administrar/layout-administrar';
 import { ComidaRecursos } from './pages/comida-recursos/comida-recursos';
+import { Mascota } from './services/mascota';
 
 
 
@@ -41,10 +42,9 @@ export const routes: Routes = [
     path: '',
     component: LayoutAdministrar,
     children: [
-      {path: 'visual-mascota', component:VisualMascota},
-      {path: 'comida-recursos', component:ComidaRecursos},
-      {path: 'panel-general', component:VisualMascota},
-      {path: 'admin/mascotas', component:Mascotas}
+      {path: 'admin/comida-recursos', component:ComidaRecursos},
+      {path: 'admin/panel-general', component:VisualMascota},
+      {path: 'admin/mascotas', component:Mascotas},
     ]
   },
 

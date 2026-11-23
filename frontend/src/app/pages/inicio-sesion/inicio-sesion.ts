@@ -38,6 +38,6 @@ export class InicioSesion {
       return;
     }
 
-    this.router.navigate(['/visual-mascota']);
+    this.router.navigate(['/admin/panel-general']);
   }
 }
