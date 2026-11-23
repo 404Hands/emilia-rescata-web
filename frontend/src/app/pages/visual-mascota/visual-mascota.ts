@@ -63,7 +63,7 @@ export class VisualMascota implements OnDestroy {
   readonly fotoReferencia = 'assets/perrito-referencia.jpg';
   readonly posicionesExtra = [1, 2, 3] as const;
 
-  // La posición 0 es la foto principal. Las posiciones 1 a 3 son las miniaturas.
+
   readonly fotos = signal<(FotoSeleccionada | null)[]>([
     null,
     null,

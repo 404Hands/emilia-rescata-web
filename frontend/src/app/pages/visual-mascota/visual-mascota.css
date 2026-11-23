@@ -2,7 +2,6 @@
   display: block;
 }
 
-/* Contenedor de la ficha */
 .ficha-adopcion {
   --rosa: #ffb4b1;
   --rosa-suave: #ffdad6;
@@ -27,7 +26,7 @@
   border-radius: 16px;
 }
 
-/* Foto principal y tres miniaturas */
+
 .fotos-mascota {
   min-width: 0;
   margin: 0;
@@ -64,7 +63,7 @@
   outline-offset: 2px;
 }
 
-/* Historia, nombre, raza y edad */
+
 .historia-mascota {
   margin-top: 20px;
 }
@@ -112,7 +111,7 @@
   box-shadow: none;
 }
 
-/* Sexo, tamaño y personalidad */
+
 .grupo-ficha {
   min-width: 0;
   margin-inline: 0;
@@ -169,7 +168,7 @@
   font-size: 0.78rem;
 }
 
-/* Estado de salud */
+
 .opciones-salud,
 .rasgos-mascota {
   display: grid;
@@ -202,7 +201,7 @@
   border-color: var(--foco);
 }
 
-/* Rasgos de personalidad */
+
 .rasgos-mascota .rasgo {
   font-size: 0.88rem;
 }
@@ -211,7 +210,7 @@
   background-color: var(--rosa-suave);
 }
 
-/* Botón y mensaje del formulario */
+
 .accion-publicar {
   padding-top: clamp(12px, 4vw, 48px);
 }
@@ -239,7 +238,7 @@
   font-size: 0.9rem;
 }
 
-/* Tablet: más espacio para las etiquetas de salud */
+
 @media (min-width: 768px) and (max-width: 991.98px) {
   .tarjeta-salud {
     flex-direction: column;
@@ -247,7 +246,6 @@
   }
 }
 
-/* Celular */
 @media (max-width: 767.98px) {
   .ficha-adopcion {
     padding: 16px 12px 28px;
