@@ -17,7 +17,6 @@ import { Donaciones } from './pages/donaciones/donaciones';
 import { VisualMascota } from './pages/visual-mascota/visual-mascota';
 import { LayoutAdministrar } from './layouts/layout-administrar/layout-administrar';
 import { ComidaRecursos } from './pages/comida-recursos/comida-recursos';
-import { Mascota } from './services/mascota';
 
 
 

@@ -4,15 +4,13 @@
         <header class="panel cabecera">
             <div>
                 <p class="cuidado mb-1">
-                    <svg class="icono-texto" aria-hidden="true">
-                        <use href="assets/iconos-recursos.svg#corazon"></use>
-                    </svg>
+                    <i class="bi bi-heart icono-texto" aria-hidden="true"></i>
                     Cuidado de los {{ inventario.perros }} perritos
                 </p>
             </div>
 
             <button type="button" class="btn boton-coral" (click)="irAlIngreso(selectorProducto)">
-                ⊕ Registrar llegada de comida
+                <i class="bi bi-plus-circle"></i> Registrar llegada de comida
             </button>
         </header>
 
@@ -21,9 +19,7 @@
             <div class="col-12 col-md-6">
                 <section class="panel resumen resumen-comida">
                     <span class="icono grande verde" aria-hidden="true">
-                        <svg class="icono-svg">
-                            <use href="assets/iconos-recursos.svg#disponible"></use>
-                        </svg>
+                        <i class="bi bi-emoji-smile"></i>
                     </span>
                     <div>
                         <h2 class="etiqueta">Comida disponible</h2>
@@ -39,9 +35,7 @@
             <div class="col-12 col-md-6">
                 <section class="panel resumen resumen-alerta">
                     <span class="icono grande coral" aria-hidden="true">
-                        <svg class="icono-svg">
-                            <use href="assets/iconos-recursos.svg#alerta"></use>
-                        </svg>
+                        <i class="bi bi-exclamation-triangle"></i>
                     </span>
                     <div class="flex-grow-1">
                         <h2 class="etiqueta">Atención necesaria</h2>
@@ -60,7 +54,7 @@
 
                     @if (inventario.faltantes().length) {
                     <button type="button" class="enlace-alerta" (click)="verFaltantes(seccionProductos)">
-                        Ver qué falta →
+                        Ver qué falta <i class="bi bi-arrow-right"></i>
                     </button>
                     }
                 </section>
@@ -91,9 +85,14 @@
                     <li class="panel producto" [class.producto-bajo]="producto.cantidad <= producto.minimo">
 
                         <span class="icono" aria-hidden="true">
-                            <svg class="icono-svg">
-                                <use [attr.href]="'assets/iconos-recursos.svg#' + producto.icono"></use>
-                            </svg>
+                            @switch (producto.icono) {
+                            @case ('huella') { <i class="bi bi-bag-heart"></i> }
+                            @case ('cachorro') { <i class="bi bi-emoji-heart-eyes"></i> }
+                            @case ('salud') { <i class="bi bi-bandaid"></i> }
+                            @case ('lata') { <i class="bi bi-cup-hot"></i> }
+                            @case ('desinfectante') { <i class="bi bi-droplet"></i> }
+                            @default { <i class="bi bi-box-seam"></i> }
+                            }
                         </span>
 
                         <div class="datos-producto">
@@ -121,13 +120,13 @@
                             <button type="button" class="btn boton-claro" [disabled]="producto.cantidad < 1"
                                 [attr.aria-label]="'Usar 1 ' + producto.unidad + ' de ' + producto.nombre"
                                 (click)="inventario.ajustar(producto.id, -1)">
-                                − Usar 1
+                                <i class="bi bi-dash-lg"></i> Usar 1
                             </button>
 
                             <button type="button" class="btn boton-agregar"
                                 [attr.aria-label]="'Agregar 1 ' + producto.unidad + ' de ' + producto.nombre"
                                 (click)="inventario.ajustar(producto.id, 1)">
-                                + Agregar {{ producto.unidad }}
+                                <i class="bi bi-plus-lg"></i> Agregar {{ producto.unidad }}
                             </button>
                         </div>
                     </li>
@@ -173,7 +172,7 @@
                     </div>
 
                     <button type="submit" class="btn boton-coral w-100 mt-3">
-                        Guardar ingreso
+                        <i class="bi bi-check-circle"></i> Guardar ingreso
                     </button>
                     <p class="mensaje mb-0" role="status">{{ mensaje() }}</p>
                 </form>

@@ -43,11 +43,21 @@
             </div>
 
             <button type="button" class="btn boton-salir" (click)="salidaSolicitada.emit()">
-                Cerrar sesión
+                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
             </button>
             } @else {
+
+            <div class="cuenta">
+                <img src="assets/ADMIN_FOTO.png" alt="" class="cuenta-foto">
+                <div class="cuenta-datos">
+                    <strong>Emilia</strong>
+                    <small>Administradora</small>
+                </div>
+            </div>
+
+                
             <a routerLink="/inicio-sesion" class="btn boton-salir">
-                Cerrar Sesión
+                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
             </a>
             }
         </div>

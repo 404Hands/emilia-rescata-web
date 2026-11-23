@@ -8,13 +8,46 @@
   --lavanda: #efedff;
   --verde: #346654;
   --coral: #ac4846;
+  --fondo-degradado: #fde8e6; /* NUEVO */
+  --circulo: #ffbab5; /* NUEVO */
 
+  position: relative; /* NUEVO */
+  overflow: hidden; /* NUEVO */
   padding: clamp(16px, 3vw, 44px);
   color: var(--tinta);
-  background: #fff;
+  background: linear-gradient(to bottom, #fff, var(--fondo-degradado)); /* NUEVO */
+}
+
+/* NUEVO: círculos decorativos del fondo */
+.recursos::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  left: -120px;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  background-color: var(--circulo);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.recursos::after {
+  content: "";
+  position: absolute;
+  bottom: -150px;
+  right: -150px;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background-color: var(--circulo);
+  opacity: 0.3;
+  pointer-events: none;
 }
 
 .contenido {
+  position: relative; /* NUEVO: el contenido va encima de los círculos */
+  z-index: 1; /* NUEVO */
   max-width: 1440px;
 }
 
@@ -131,6 +164,11 @@
   border: 0;
   background: transparent;
   text-align: left;
+  transition: transform 0.3s; /* NUEVO */
+}
+
+.enlace-alerta:hover { /* NUEVO */
+  transform: scale(1.05);
 }
 
 .titulo-lista {
@@ -201,6 +239,7 @@
   min-height: 42px;
   border-radius: 10px;
   font-weight: 600;
+  transition: filter 0.3s, transform 0.3s; /* NUEVO */
 }
 
 .acciones .btn {
@@ -226,6 +265,7 @@
 
 .recursos .btn:hover:not(:disabled) {
   filter: brightness(0.94);
+  transform: scale(1.05); /* NUEVO */
 }
 
 .donacion .form-label {
@@ -283,7 +323,23 @@
   .cabecera .btn {
     width: 100%;
   }
+
+  /* NUEVO: círculos más pequeños en celular */
+  .recursos::before {
+    width: 220px;
+    height: 220px;
+    top: -90px;
+    left: -90px;
+  }
+
+  .recursos::after {
+    width: 250px;
+    height: 250px;
+    bottom: -100px;
+    right: -100px;
+  }
 }
+
 .icono-svg {
   display: block;
   width: 26px;
@@ -296,9 +352,6 @@
 }
 
 .icono-texto {
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  margin-right: 4px;
-  vertical-align: -3px;
+  margin-right: 4px; /* NUEVO: ahora es un ícono de Bootstrap, no un svg */
+  vertical-align: -1px;
 }
