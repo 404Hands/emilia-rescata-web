@@ -61,7 +61,7 @@ export class VisualMascota implements OnDestroy {
   });
 
   readonly mensaje = signal('');
-  readonly fotoReferencia = 'assets/perrito-referencia.jpg';
+  readonly fotoReferencia = 'assets/perrito-referencia.png';
   readonly posicionesExtra = [1, 2, 3] as const;
 
 
