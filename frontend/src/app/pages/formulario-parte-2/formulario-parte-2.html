@@ -9,7 +9,7 @@
         <div class="row justify-content-center">
             <div class="col-12 col-md-10 col-lg-7">
 
-                <form class="tarjeta-formulario">
+                <form class="tarjeta-formulario" novalidate (submit)="siguiente($event)">
 
                     <div class="pasos">
                         <div class="circulo activo"><i class="bi bi-check-lg"></i></div>
@@ -25,59 +25,79 @@
 
                         <p class="titulo-grupo">Tipo de vivienda:</p>
                         <div class="form-check">
-                            <input type="radio" name="vivienda" id="vivienda1" class="form-check-input">
+                            <input type="radio" id="vivienda1" class="form-check-input" value="Casa con patio" [formField]="solicitudFormulario.tipoVivienda">
                             <label for="vivienda1" class="form-check-label">Casa con patio</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" name="vivienda" id="vivienda2" class="form-check-input">
+                            <input type="radio" id="vivienda2" class="form-check-input" value="Casa sin patio" [formField]="solicitudFormulario.tipoVivienda">
                             <label for="vivienda2" class="form-check-label">Casa sin patio</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" name="vivienda" id="vivienda3" class="form-check-input">
+                            <input type="radio" id="vivienda3" class="form-check-input" value="Departamento con patio" [formField]="solicitudFormulario.tipoVivienda">
                             <label for="vivienda3" class="form-check-label">Departamento con patio</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" name="vivienda" id="vivienda4" class="form-check-input">
+                            <input type="radio" id="vivienda4" class="form-check-input" value="Departamento sin patio" [formField]="solicitudFormulario.tipoVivienda">
                             <label for="vivienda4" class="form-check-label">Departamento sin patio</label>
                         </div>
+                        @if(solicitudFormulario.tipoVivienda().touched() || intentoEnvio()){
+                            @for(error of solicitudFormulario.tipoVivienda().errors(); track error){
+                                <p class="text-danger small mt-1 mb-0">{{error.message}}</p>
+                            }
+                        }
 
-                        <p class="titulo-grupo">Tipo de vivienda:</p>
+                        <p class="titulo-grupo">Situación de la vivienda:</p>
                         <div class="form-check">
-                            <input type="radio" name="propiedad" id="propiedad1" class="form-check-input">
+                            <input type="radio" id="propiedad1" class="form-check-input" value="Propia" [formField]="solicitudFormulario.propiedadVivienda">
                             <label for="propiedad1" class="form-check-label">Propia</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" name="propiedad" id="propiedad2" class="form-check-input">
+                            <input type="radio" id="propiedad2" class="form-check-input" value="Alquilada (con permiso para mascotas)" [formField]="solicitudFormulario.propiedadVivienda">
                             <label for="propiedad2" class="form-check-label">Alquilada (con permiso para mascotas)</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" name="propiedad" id="propiedad3" class="form-check-input">
+                            <input type="radio" id="propiedad3" class="form-check-input" value="Familiar" [formField]="solicitudFormulario.propiedadVivienda">
                             <label for="propiedad3" class="form-check-label">Familiar</label>
                         </div>
+                        @if(solicitudFormulario.propiedadVivienda().touched() || intentoEnvio()){
+                            @for(error of solicitudFormulario.propiedadVivienda().errors(); track error){
+                                <p class="text-danger small mt-1 mb-0">{{error.message}}</p>
+                            }
+                        }
 
                         <p class="titulo-grupo">¿Hay niños en casa?:</p>
                         <div class="form-check">
-                            <input type="radio" name="ninos" id="ninos1" class="form-check-input">
+                            <input type="radio" id="ninos1" class="form-check-input" value="Sí" [formField]="solicitudFormulario.hayNinos">
                             <label for="ninos1" class="form-check-label">Sí</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" name="ninos" id="ninos2" class="form-check-input">
+                            <input type="radio" id="ninos2" class="form-check-input" value="No" [formField]="solicitudFormulario.hayNinos">
                             <label for="ninos2" class="form-check-label">No</label>
                         </div>
+                        @if(solicitudFormulario.hayNinos().touched() || intentoEnvio()){
+                            @for(error of solicitudFormulario.hayNinos().errors(); track error){
+                                <p class="text-danger small mt-1 mb-0">{{error.message}}</p>
+                            }
+                        }
 
                         <p class="titulo-grupo">¿Tienes actualmente otras mascotas?:</p>
                         <div class="form-check">
-                            <input type="radio" name="mascotas" id="mascotas1" class="form-check-input">
+                            <input type="radio" id="mascotas1" class="form-check-input" value="Sí" [formField]="solicitudFormulario.otrasMascotas">
                             <label for="mascotas1" class="form-check-label">Sí</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" name="mascotas" id="mascotas2" class="form-check-input">
+                            <input type="radio" id="mascotas2" class="form-check-input" value="No" [formField]="solicitudFormulario.otrasMascotas">
                             <label for="mascotas2" class="form-check-label">No</label>
                         </div>
+                        @if(solicitudFormulario.otrasMascotas().touched() || intentoEnvio()){
+                            @for(error of solicitudFormulario.otrasMascotas().errors(); track error){
+                                <p class="text-danger small mt-1 mb-0">{{error.message}}</p>
+                            }
+                        }
 
                         <div class="d-grid gap-2 caja-botones">
-                            <button type="button" class="btn boton-formulario" routerLink="/formulario-parte-1">ANTERIOR</button>
-                            <button type="submit" class="btn boton-formulario" routerLink="/formulario-parte-3">SIGUIENTE</button>
+                            <button type="button" class="btn boton-formulario" (click)="anterior()">ANTERIOR</button>
+                            <button type="submit" class="btn boton-formulario">SIGUIENTE</button>
                         </div>
 
                     </div>
