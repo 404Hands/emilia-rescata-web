@@ -16,6 +16,7 @@ import { Adopciones } from './pages/adopciones/adopciones';
 import { Donaciones } from './pages/donaciones/donaciones';
 import { VisualMascota } from './pages/visual-mascota/visual-mascota';
 import { LayoutAdministrar } from './layouts/layout-administrar/layout-administrar';
+import { ComidaRecursos } from './pages/comida-recursos/comida-recursos';
 
 
 
@@ -37,10 +38,13 @@ export const routes: Routes = [
 
 
   {
-    path: 'visual-mascota',
+    path: '',
     component: LayoutAdministrar,
     children: [
-      {path: '', component:VisualMascota},
+      {path: 'visual-mascota', component:VisualMascota},
+      {path: 'comida-recursos', component:ComidaRecursos},
+      {path: 'panel-general', component:VisualMascota},
+      {path: 'admin/mascotas', component:Mascotas}
     ]
   },
 
@@ -57,6 +61,5 @@ export const routes: Routes = [
   { path: 'formulario-parte-1', component: FormularioParte1 },
   { path: 'formulario-parte-2', component: FormularioParte2 },
   { path: 'formulario-parte-3', component: FormularioParte3 },
-  { path: 'formulario-parte-4', component: FormularioParte4 }
-
+  { path: 'formulario-parte-4', component: FormularioParte4 },
 ];
