@@ -145,3 +145,12 @@ main a:hover {
         height: 230px;
     }
 }
+
+.Historia, .Mision{
+    border-radius: 15px;
+}
+
+.PersonasComentarios{
+    width: 100px;
+    height: 100px;
+}
