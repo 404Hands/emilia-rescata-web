@@ -42,12 +42,9 @@ export const routes: Routes = [
     path: '',
     component: LayoutAdministrar,
     children: [
-      {path: 'visual-mascota', component:VisualMascota},
-      {path: 'comida-recursos', component:ComidaRecursos},
-      {path: 'panel-general', component:VisualMascota},
+      {path: 'admin/comida-recursos', component:ComidaRecursos},
+      {path: 'admin/panel-general', component:VisualMascota},
       {path: 'admin/mascotas', component:Mascotas},
-      {path: 'contacto', component:Contacto},
-      {path:'mascotas', component:Mascota}
     ]
   },
 
