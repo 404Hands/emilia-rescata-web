@@ -1,8 +1,9 @@
 import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { form, FormField, min, required } from '@angular/forms/signals';
-
+import { RouterOutlet } from '@angular/router';
 import type { Mascota } from '../../interfaces/mascota';
 import { Mascota as MascotaService } from '../../services/mascota';
+import { RouterLink } from '@angular/router';
 
 interface FotoSeleccionada {
   archivo: File;
@@ -12,7 +13,7 @@ interface FotoSeleccionada {
 @Component({
   selector: 'app-visual-mascota',
   standalone: true,
-  imports: [FormField],
+  imports: [FormField, RouterLink, RouterOutlet],
   templateUrl: './visual-mascota.html',
   styleUrl: './visual-mascota.css'
 })
