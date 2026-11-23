@@ -1,0 +1,186 @@
+:host {
+    --color-rosado: #FDDDD6;
+    --color-principal: #670502;
+    --color-azul: #4779A2;
+    --color-oscuro: #282247;
+    --color-blanco: #FFFFFF;
+    --color-negro: #161616;
+}
+
+main {
+    color: var(--color-negro);
+    background-color: var(--color-blanco);
+}
+
+main p {
+    text-align: justify;
+    color: var(--color-negro);
+    font-size: 1.25rem;
+}
+
+main h2 {
+    color: var(--color-negro);
+    font-weight: bold;
+}
+
+#portada,
+#donar-intro,
+#otras-formas {
+    background-color: var(--color-blanco);
+}
+
+#textoDonacion {
+    color: var(--color-principal);
+    font-weight: 600;
+}
+
+@keyframes pulsoDonar {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(103, 5, 2, 0.55);
+    }
+
+    70% {
+        transform: scale(1.04);
+        box-shadow: 0 0 0 16px rgba(103, 5, 2, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(103, 5, 2, 0);
+    }
+}
+
+#botonDonarAhora {
+    position: relative;
+    overflow: hidden;
+    --bs-btn-bg: var(--color-principal);
+    --bs-btn-color: var(--color-blanco);
+    --bs-btn-border-color: var(--color-principal);
+
+    --bs-btn-hover-bg: var(--color-principal);
+    --bs-btn-hover-color: var(--color-blanco);
+    --bs-btn-hover-border-color: var(--color-principal);
+
+    --bs-btn-active-bg: var(--color-principal);
+    --bs-btn-active-color: var(--color-blanco);
+
+    animation: pulsoDonar 2.2s infinite ease-in-out;
+    transition: transform 0.3s ease, background-color 0.3s ease,
+        border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#botonDonarAhora::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(120deg,
+            transparent,
+            rgba(255, 255, 255, 0.35),
+            transparent);
+    transition: left 0.6s ease;
+}
+
+#botonDonarAhora:hover {
+    animation: none;
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 10px 22px rgba(40, 34, 71, 0.3);
+}
+
+#botonDonarAhora:hover::before {
+    left: 130%;
+}
+
+#botonDonarAhora:active {
+    transform: translateY(0) scale(0.98);
+}
+
+#destino-ayuda {
+    background-color: var(--color-rosado);
+}
+
+#tituloDestino {
+    color: var(--color-principal);
+}
+
+.tarjeta-destino {
+    background-color: var(--color-blanco);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tarjeta-destino:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(40, 34, 71, 0.1);
+}
+
+.tarjeta-destino h3 {
+    color: var(--color-principal);
+    font-weight: bold;
+}
+
+.tarjeta-destino p {
+    color: var(--color-negro);
+    font-size: 1.05rem;
+}
+
+#donar-intro img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+}
+
+.tarjeta-destino img {
+    width: 160px !important;
+    height: 160px !important;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 50% !important;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#otras-formas>p {
+    text-align: center;
+}
+
+.tarjeta-otra {
+    border: 2px solid var(--color-rosado);
+    border-radius: 1.5rem;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.tarjeta-otra:hover {
+    transform: translateY(-5px);
+    border-color: var(--color-azul);
+}
+
+.tarjeta-otra h3 {
+    color: var(--color-oscuro);
+    font-weight: bold;
+}
+
+.tarjeta-otra p {
+    font-size: 1.05rem;
+}
+
+.enlace-otra {
+    color: var(--color-azul);
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.enlace-otra:hover {
+    color: var(--color-oscuro);
+    text-decoration: none;
+}
+
+.enlace-otra:focus-visible {
+    outline: 2px solid var(--color-azul);
+    outline-offset: 4px;
+}
