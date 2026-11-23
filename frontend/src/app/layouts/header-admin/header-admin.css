@@ -23,6 +23,11 @@
   width: 65px;
   height: 65px;
   object-fit: contain;
+  transition: transform 0.3s;
+}
+
+.marca-logo:hover {
+  transform: scale(1.1);
 }
 
 .enlaces,
@@ -57,6 +62,7 @@
   text-decoration: none;
   white-space: nowrap;
   font-size: 0.95rem;
+  transition: color 0.3s, transform 0.3s;
 }
 
 .enlaces a.activo {
@@ -64,8 +70,8 @@
 }
 
 .enlaces a:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
+  color: #883e47;
+  transform: scale(1.08);
 }
 
 .acciones {
@@ -127,10 +133,13 @@
   border-radius: 8px;
   font-size: 0.85rem;
   font-weight: 600;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .boton-salir:hover {
   background-color: #ffb5a2;
+  color: #2d201e;
+  transform: scale(1.05);
 }
 
 .barra-admin a:focus-visible,
@@ -180,4 +189,8 @@
   .boton-salir {
     padding-inline: 8px;
   }
+}
+
+.boton-salir i {
+  font-size: 1.1rem;
 }
