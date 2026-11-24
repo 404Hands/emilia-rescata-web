@@ -1,0 +1,369 @@
+:host {
+    --color-rosado: #F6CCC9;
+    --color-principal: #670502;
+    --color-azul: #4779A2;
+    --color-oscuro: #282247;
+    --color-blanco: #FFFFFF;
+    --color-negro: #161616;
+    --color-fondo: #FFF5F3;
+
+    display: block;
+}
+
+.logo-emilia {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+}
+
+.logo-resumen {
+    width: 75px;
+    height: 75px;
+    object-fit: contain;
+}
+
+.titulo-principal {
+    color: var(--color-principal);
+    font-size: 2.3rem;
+    font-weight: 800;
+}
+
+.descripcion-principal {
+    color: var(--color-oscuro);
+    font-size: 1.05rem;
+}
+
+.progreso {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 480px;
+    gap: 15px;
+}
+
+.paso-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #777;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.numero-paso {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #E8D9D7;
+    color: #777;
+    font-weight: 700;
+}
+
+.numero-paso.activo,
+.numero-paso.completado {
+    background: var(--color-principal);
+    color: var(--color-blanco);
+}
+
+.text-activo {
+    color: var(--color-principal);
+}
+
+.linea-progreso {
+    width: 90px;
+    height: 3px;
+    margin-bottom: 25px;
+    background: var(--color-principal);
+    border-radius: 5px;
+}
+
+.donacion-card,
+.resumen-card {
+    background: var(--color-blanco);
+    border-radius: 22px;
+    padding: 35px;
+    box-shadow: 0 8px 30px rgba(40, 34, 71, 0.08);
+    border: 1px solid rgba(103, 5, 2, 0.07);
+}
+
+.titulo-seccion {
+    color: var(--color-principal);
+    font-size: 1.45rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.texto-secundario {
+    color: #777;
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+}
+
+.form-label {
+    color: var(--color-oscuro);
+    font-weight: 600;
+    font-size: 0.92rem;
+    margin-bottom: 8px;
+}
+
+.form-control {
+    min-height: 48px;
+    border: 1px solid #E5D7D5;
+    border-radius: 10px;
+    padding: 11px 14px;
+    color: var(--color-negro);
+    background: #FFFCFB;
+}
+
+.form-control:focus {
+    border-color: var(--color-azul);
+    box-shadow: 0 0 0 3px rgba(71, 121, 162, 0.12);
+}
+
+.input-group-text {
+    background: #FDEBEA;
+    color: var(--color-principal);
+    border: 1px solid #E5D7D5;
+    border-radius: 10px 0 0 10px;
+    font-weight: 600;
+}
+
+.metodo-pago {
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border: 2px solid #EAE1E0;
+    border-radius: 14px;
+    background: var(--color-blanco);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.metodo-pago:hover {
+    border-color: var(--color-azul);
+    transform: translateY(-2px);
+}
+
+.metodo-pago.metodo-seleccionado {
+    border-color: var(--color-principal);
+    background: #FFF5F3;
+    box-shadow: 0 4px 12px rgba(103, 5, 2, 0.08);
+}
+
+.imagen-banco {
+    max-width: 145px;
+    max-height: 65px;
+    width: 100%;
+    object-fit: contain;
+}
+
+.formulario-pago {
+    margin-top: 25px;
+    padding: 25px;
+    background: #FFFAF9;
+    border: 1px solid #F1DEDC;
+    border-radius: 15px;
+    animation: aparecer 0.25s ease;
+}
+
+.formulario-pago h3 {
+    color: var(--color-principal);
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.formulario-pago .texto-secundario {
+    margin-bottom: 20px;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.resumen-card {
+    position: sticky;
+    top: 25px;
+}
+
+.resumen-fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 13px 0;
+    border-bottom: 1px solid #F0E5E3;
+    color: var(--color-oscuro);
+    font-size: 0.95rem;
+}
+
+.resumen-fila strong {
+    color: var(--color-negro);
+    text-align: right;
+}
+
+.resumen-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: 12px;
+    background: #FDEBEA;
+    color: var(--color-principal);
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.resumen-total strong {
+    font-size: 1.35rem;
+}
+
+.btn-continuar {
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 25px;
+    border: none;
+    border-radius: 8px;
+    background: var(--color-principal);
+    color: var(--color-blanco);
+    font-size: 1rem;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-continuar:hover:not(:disabled) {
+    background: #8A0B06;
+    color: var(--color-blanco);
+    transform: translateY(-2px);
+}
+
+.btn-continuar:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.btn-volver {
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px 25px;
+    border: 2px solid var(--color-azul);
+    border-radius: 8px;
+    background: var(--color-blanco);
+    color: var(--color-azul);
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-volver:hover {
+    background: var(--color-azul);
+    color: var(--color-blanco);
+}
+
+.separador {
+    width: 100%;
+    height: 1px;
+    margin: 25px 0;
+    background: #EEE2E0;
+    border: none;
+}
+
+.mensaje-formulario {
+    padding: 13px 16px;
+    border-radius: 10px;
+    background: #FDEBEA;
+    color: var(--color-principal);
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.mensaje-info {
+    background: #EAF3F8;
+    color: var(--color-azul);
+}
+.fondo-exito {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(40, 34, 71, 0.55);
+    animation: fundido 0.25s ease;
+}
+
+.tarjeta-exito {
+    width: 100%;
+    max-width: 420px;
+    padding: 40px 32px 32px;
+    text-align: center;
+    background: var(--color-blanco);
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(40, 34, 71, 0.3);
+    animation: aparecer-tarjeta 0.35s ease;
+}
+
+.icono-check {
+    width: 84px;
+    height: 84px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #E6F6EC;
+    color: #1E9E55;
+}
+
+.tarjeta-exito h2 {
+    color: var(--color-principal);
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.tarjeta-exito p {
+    color: var(--color-oscuro);
+    font-size: 0.97rem;
+    margin-bottom: 26px;
+}
+
+@keyframes fundido {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes aparecer-tarjeta {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}

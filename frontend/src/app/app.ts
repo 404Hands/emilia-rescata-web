@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { Inicio } from './pages/inicio/inicio';
 import { SobreNosotros } from './pages/sobre-nosotros/sobre-nosotros';
 import { Adopciones } from './pages/adopciones/adopciones';
-
+import { Donaciones } from './pages/donaciones/donaciones';
 
 
 import { Footer } from './layouts/footer/footer';
@@ -21,16 +21,10 @@ import { FormularioParte4 } from './pages/formulario-parte-4/formulario-parte-4'
 import { InicioSesion } from './pages/inicio-sesion/inicio-sesion';
 import { Mascotas } from './pages/mascotas/mascotas';
 
-
-
-
-
 @Component({
-  imports: [RouterOutlet, Footer, FooterInicioSesion, Header, HeaderInicioSesion, Contacto, FormularioParte1, FormularioParte2, FormularioParte3, FormularioParte4, InicioSesion, Mascotas],
   selector: 'app-root',
-  styleUrl: './app.css',
+  imports: [RouterOutlet],
   templateUrl: './app.html',
+  styleUrl: './app.css'
 })
-export class App {
-  protected readonly title = signal('frontend');
-}
+export class App {}
