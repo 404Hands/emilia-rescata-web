@@ -1,0 +1,97 @@
+<main>
+    <section id="seleccionar-donacion" class="container py-5">
+
+        <header class="text-center mb-5">
+            <img src="/assets/FOOTER_IMAGEN.png" alt="Logo de Emilia rescata" class="img-fluid logo-emilia">
+
+            <h1 class="mt-3">Tu donación</h1>
+
+            <p>
+                Elige cuánto deseas aportar para ayudar a nuestros animales.
+            </p>
+        </header>
+
+        <div id="progreso-donacion" class="progreso mx-auto mb-5">
+            <div class="paso-item">
+                <div class="numero-paso activo">1</div>
+                <span class="text-activo">Tu donación</span>
+            </div>
+
+            <div class="linea-progreso"></div>
+
+            <div class="paso-item">
+                <div class="numero-paso">2</div>
+                <span>Completar pago</span>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <article class="col-12 col-lg-8">
+                <div class="donacion-card">
+
+                    <h2>Elige el monto de tu donación</h2>
+
+                    <p>
+                        Cada aporte nos ayuda a brindar alimento, atención y protección.
+                    </p>
+
+                    <div class="row g-3 mt-3">
+
+                        @for (monto of montos; track monto) {
+                        <div class="col-6 col-md-4">
+                            <button type="button" class="monto"
+                                [class.monto-seleccionado]="modelo().monto === monto && !otroMonto()"
+                                (click)="seleccionarMonto(monto)">
+                                S/ {{ monto }}
+                            </button>
+                        </div>
+                        }
+
+                        <div class="col-12">
+                            <button type="button" class="monto monto-otro" [class.monto-seleccionado]="otroMonto()"
+                                (click)="seleccionarOtro()">
+                                Otro monto
+                            </button>
+                        </div>
+
+                    </div>
+
+                    @if (otroMonto()) {
+                    <div class="mt-4">
+                        <label for="otroMonto" class="form-label">
+                            Ingresa el monto que deseas donar
+                        </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text">S/</span>
+
+                            <input id="otroMonto" type="number" class="form-control" min="1" step="0.01"
+                                placeholder="0.00" [value]="modelo().monto || ''" (input)="actualizarMonto($event)">
+                        </div>
+                    </div>
+                    }
+
+                    <div class="total-card mt-4">
+                        <span>Total de tu donación</span>
+                        <strong>S/ {{ modelo().monto.toFixed(2) }}</strong>
+                    </div>
+
+                    @if (mensaje()) {
+                    <div class="mensaje-formulario mt-3">
+                        {{ mensaje() }}
+                    </div>
+                    }
+
+                    <div class="mt-4 text-center">
+                        <a class="btn-continuar d-inline-block text-center text-decoration-none"
+                            [routerLink]="montoValido() ? '/datos-donacion' : null" (click)="guardarMonto()">
+                            Continuar con mi donación
+                        </a>
+                    </div>
+
+                </div>
+            </article>
+        </div>
+
+    </section>
+</main>

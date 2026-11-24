@@ -1,0 +1,304 @@
+<main>
+    <section id="datos-portada" class="container py-5">
+        <header class="text-center mb-5">
+            <img src="/assets/FOOTER_IMAGEN.png" alt="Logo de Emilia Rescata" class="img-fluid logo-emilia">
+
+            <h1 class="titulo-principal mt-3">Completa tu donación</h1>
+
+            <p class="descripcion-principal">
+                Estás a un paso de ayudar a nuestros animales. Gracias por formar parte de esta causa.
+            </p>
+        </header>
+
+        <div class="progreso mx-auto mb-5">
+            <div class="paso-item">
+                <div class="numero-paso completado">1</div>
+                <span>Tu donación</span>
+            </div>
+
+            <div class="linea-progreso"></div>
+
+            <div class="paso-item">
+                <div class="numero-paso activo">2</div>
+                <span class="text-activo">Completar pago</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="completar-donacion" class="container pb-5">
+        <div class="row g-4 justify-content-center">
+
+            <article class="col-12 col-lg-7">
+                <div class="donacion-card">
+
+                    <h2 class="titulo-seccion">Información de facturación</h2>
+
+                    <p class="texto-secundario">
+                        Completa tus datos para continuar con el proceso de donación.
+                    </p>
+
+                    <div class="row g-3">
+
+                        <div class="col-12 col-md-6">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input id="nombre" type="text" class="form-control" placeholder="Tu nombre"
+                                [value]="nombre()" (input)="actualizarCampo('nombre', $event)">
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label for="apellidos" class="form-label">Apellidos</label>
+                            <input id="apellidos" type="text" class="form-control" placeholder="Tus apellidos"
+                                [value]="apellidos()" (input)="actualizarCampo('apellidos', $event)">
+                        </div>
+
+                        <div class="col-12">
+                            <label for="correo" class="form-label">Correo electrónico</label>
+                            <input id="correo" type="email" class="form-control" placeholder="correo@ejemplo.com"
+                                [value]="correo()" (input)="actualizarCampo('correo', $event)">
+                        </div>
+
+                        <div class="col-12">
+                            <label for="telefono" class="form-label">Móvil</label>
+                            <div class="input-group">
+                                <span class="input-group-text">+51</span>
+                                <input id="telefono" type="tel" class="form-control" placeholder="999 999 999"
+                                    [value]="telefono()" (input)="actualizarCampo('telefono', $event)">
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <input id="direccion" type="text" class="form-control" placeholder="Tu dirección"
+                                [value]="direccion()" (input)="actualizarCampo('direccion', $event)">
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label for="ciudad" class="form-label">Ciudad</label>
+                            <input id="ciudad" type="text" class="form-control" placeholder="Ciudad" [value]="ciudad()"
+                                (input)="actualizarCampo('ciudad', $event)">
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label for="provincia" class="form-label">Provincia</label>
+                            <input id="provincia" type="text" class="form-control" placeholder="Provincia"
+                                [value]="provincia()" (input)="actualizarCampo('provincia', $event)">
+                        </div>
+
+                        <div class="col-12">
+                            <label for="codigoPostal" class="form-label">Código postal</label>
+                            <input id="codigoPostal" type="text" class="form-control" placeholder="Código postal"
+                                [value]="codigoPostal()" (input)="actualizarCampo('codigoPostal', $event)">
+                        </div>
+
+                    </div>
+
+                    <hr class="separador">
+
+                    <h2 class="titulo-seccion">Método de pago</h2>
+
+                    <p class="texto-secundario">
+                        Selecciona cómo deseas realizar tu donación.
+                    </p>
+
+                    <div class="row g-3">
+
+                        @for (metodo of metodos; track metodo) {
+                        <div class="col-6">
+                            <button type="button" class="metodo-pago w-100"
+                                [class.metodo-seleccionado]="metodoPago() === metodo"
+                                [attr.aria-label]="'Seleccionar ' + metodo"
+                                [attr.aria-pressed]="metodoPago() === metodo" (click)="seleccionarMetodo(metodo)">
+
+                                @if (metodo === 'BCP') {
+                                <img src="/assets/BCP.png" alt="BCP" class="imagen-banco">
+                                }
+
+                                @if (metodo === 'Banco de la Nación') {
+                                <img src="/assets/BANCO_NACION.png" alt="Banco de la Nación" class="imagen-banco">
+                                }
+
+                                @if (metodo === 'BBVA') {
+                                <img src="/assets/BBVA.png" alt="BBVA" class="imagen-banco">
+                                }
+
+                                @if (metodo === 'PayPal') {
+                                <img src="/assets/PAYPAL.png" alt="PayPal" class="imagen-banco">
+                                }
+
+                            </button>
+                        </div>
+                        }
+
+                    </div>
+
+                    @if (esTarjeta()) {
+                    <section class="formulario-pago mt-4">
+                        <h3>Datos de tu tarjeta</h3>
+
+                        <p class="texto-secundario">
+                            Método seleccionado: {{ metodoPago() }}
+                        </p>
+
+                        <div class="row g-3">
+
+                            <div class="col-12">
+                                <label for="numeroTarjeta" class="form-label">
+                                    Número de tarjeta
+                                </label>
+
+                                <input id="numeroTarjeta" type="text" class="form-control"
+                                    [class.is-invalid]="erroresTarjeta().numero"
+                                    placeholder="0000 0000 0000 0000" inputmode="numeric" maxlength="19"
+                                    autocomplete="off" [value]="numeroTarjeta()"
+                                    (input)="actualizarTarjeta('numero', $event)">
+                                @if (erroresTarjeta().numero) {
+                                <small class="text-danger">{{ erroresTarjeta().numero }}</small>
+                                }
+                            </div>
+
+                            <div class="col-12">
+                                <label for="titularTarjeta" class="form-label">
+                                    Nombre del titular
+                                </label>
+
+                                <input id="titularTarjeta" type="text" class="form-control"
+                                    [class.is-invalid]="erroresTarjeta().titular"
+                                    placeholder="Nombre como aparece en la tarjeta" autocomplete="off"
+                                    [value]="titularTarjeta()" (input)="actualizarTarjeta('titular', $event)">
+                                @if (erroresTarjeta().titular) {
+                                <small class="text-danger">{{ erroresTarjeta().titular }}</small>
+                                }
+                            </div>
+
+                            <div class="col-6">
+                                <label for="fechaVencimiento" class="form-label">
+                                    Fecha de vencimiento
+                                </label>
+
+                                <input id="fechaVencimiento" type="text" class="form-control"
+                                    [class.is-invalid]="erroresTarjeta().fecha"
+                                    placeholder="MM/AA" maxlength="5" autocomplete="off"
+                                    [value]="fechaVencimiento()" (input)="actualizarTarjeta('fecha', $event)">
+                                @if (erroresTarjeta().fecha) {
+                                <small class="text-danger">{{ erroresTarjeta().fecha }}</small>
+                                }
+                            </div>
+
+                            <div class="col-6">
+                                <label for="cvv" class="form-label">CVV</label>
+
+                                <input id="cvv" type="password" class="form-control"
+                                    [class.is-invalid]="erroresTarjeta().cvv"
+                                    placeholder="123" inputmode="numeric" maxlength="4" autocomplete="off"
+                                    [value]="cvv()" (input)="actualizarTarjeta('cvv', $event)">
+                                @if (erroresTarjeta().cvv) {
+                                <small class="text-danger">{{ erroresTarjeta().cvv }}</small>
+                                }
+                            </div>
+
+                        </div>
+                    </section>
+                    }
+
+                    @if (metodoPago() === 'PayPal') {
+                    <section class="formulario-pago mt-4">
+                        <h3>Datos de tu cuenta PayPal</h3>
+
+                        <p class="texto-secundario">
+                            Ingresa el correo electrónico asociado a tu cuenta.
+                        </p>
+
+                        <div>
+                            <label for="correoPayPal" class="form-label">
+                                Correo electrónico de PayPal
+                            </label>
+
+                            <input id="correoPayPal" type="email" class="form-control" placeholder="correo@ejemplo.com"
+                                autocomplete="off" [value]="correoPayPal()" (input)="actualizarCorreoPayPal($event)">
+                        </div>
+                    </section>
+                    }
+
+                    @if (mensaje()) {
+                    <div class="mensaje-formulario mt-4" [class.mensaje-info]="tipoMensaje() === 'info'" role="status">
+                        {{ mensaje() }}
+                    </div>
+                    }
+
+                    <div class="row g-3 mt-3">
+
+                        <div class="col-12 col-md-5">
+                            <a routerLink="/proceso-donacion" class="btn-volver">
+                                Volver
+                            </a>
+                        </div>
+
+                        <div class="col-12 col-md-7">
+                            <button type="button" class="btn-continuar w-100" [disabled]="!metodoPago()"
+                                (click)="confirmarDonacion()">
+                                Completar donación
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </article>
+
+            <aside class="col-12 col-lg-5">
+                <div class="resumen-card">
+
+                    <div class="text-center">
+                        <img src="/assets/FOOTER_IMAGEN.png" alt="Logo de Emilia Rescata"
+                            class="img-fluid logo-resumen">
+                    </div>
+
+                    <h2 class="titulo-seccion mt-3">Resumen de tu donación</h2>
+
+                    <div class="resumen-fila">
+                        <span>Donación</span>
+                        <strong>S/ {{ monto().toFixed(2) }}</strong>
+                    </div>
+
+                    <div class="resumen-fila">
+                        <span>Método de pago</span>
+                        <strong>{{ metodoPago() || 'Por seleccionar' }}</strong>
+                    </div>
+
+                    <div class="resumen-total">
+                        <span>Total</span>
+                        <strong>S/ {{ monto().toFixed(2) }}</strong>
+                    </div>
+
+                </div>
+            </aside>
+
+        </div>
+    </section>
+</main>
+
+@if (donacionExitosa()) {
+<div class="fondo-exito" role="dialog" aria-modal="true" aria-labelledby="titulo-exito">
+    <div class="tarjeta-exito">
+
+        <div class="icono-check">
+            <svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="currentColor" stroke-width="3"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="5 13 10 18 19 7"></polyline>
+            </svg>
+        </div>
+
+        <h2 id="titulo-exito">¡Donación realizada!</h2>
+
+        <p>
+            Gracias por tu aporte de <strong>S/ {{ monto().toFixed(2) }}</strong>.
+            Con tu ayuda seguimos cuidando y protegiendo a nuestros animales.
+        </p>
+
+        <a routerLink="/donaciones" class="btn-continuar w-100 text-decoration-none">
+            Volver
+        </a>
+
+    </div>
+</div>
+}

@@ -53,6 +53,7 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
+app.include_router(rutasDonacion, prefix='/api')
 app.include_router(mascotas_router)
 app.include_router(recursos_router)
 app.include_router(rutasContacto, prefix='/api')
