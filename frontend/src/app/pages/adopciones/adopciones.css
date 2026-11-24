@@ -1,0 +1,79 @@
+:host {
+    --color-rosado: #FDDDD6;
+    --color-principal: #670502;
+    --color-azul: #4779A2;
+    --color-oscuro: #282247;
+    --color-blanco: #FFFFFF;
+    --color-negro: #161616;
+}
+
+main {
+    color: var(--color-negro);
+    background-color: var(--color-blanco);
+}
+
+main p {
+    text-align: justify;
+    color: var(--color-negro);
+    font-size: 1.25rem;
+}
+
+main h2 {
+    color: var(--color-negro);
+    font-weight: bold;
+}
+
+#portada {
+    background-color: var(--color-blanco);
+}
+
+#adopta {
+    background-color: var(--color-blanco);
+}
+
+#textoAdopcion {
+    color: var(--color-principal);
+}
+
+#botonAdoptar {
+    --bs-btn-bg: var(--color-principal);
+    --bs-btn-color: var(--color-blanco);
+    --bs-btn-border-color: var(--color-principal);
+
+    --bs-btn-hover-bg: var(--color-oscuro);
+    --bs-btn-hover-color: var(--color-blanco);
+    --bs-btn-hover-border-color: var(--color-oscuro);
+
+    --bs-btn-active-bg: var(--color-oscuro);
+    --bs-btn-active-color: var(--color-blanco);
+
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+#exitosas {
+    background-color: var(--color-rosado);
+}
+
+#tituloExitosas {
+    color: var(--color-principal);
+}
+
+#adopta img,
+#exitosas video {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+}
+
+.boton-quiero-adoptar {
+    background-color: var(--color-principal);
+    color: var(--color-blanco);
+    border: none;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.boton-quiero-adoptar:hover {
+    background-color: var(--color-principal);
+    color: var(--color-blanco);
+    transform: scale(1.05);
+}

@@ -1,0 +1,153 @@
+:host {
+    --color-rosado: #FDDDD6;
+    --color-principal: #670502;
+    --color-azul: #4779A2;
+    --color-oscuro: #282247;
+    --color-blanco: #FFFFFF;
+    --color-negro: #161616;
+}
+
+main,
+aside {
+    color: var(--color-oscuro);
+    background-color: var(--color-blanco);
+}
+
+main p,
+aside p {
+    text-align: justify;
+}
+
+main h2,
+main h3,
+main h4,
+aside h2,
+aside h3,
+aside h4 {
+    color: var(--color-oscuro);
+}
+
+#portada {
+    background-color: var(--color-blanco);
+}
+
+#portada .carousel img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+#objetivos {
+    background-color: var(--color-blanco);
+}
+
+#objetivos h2,
+#objetivos p {
+    color: var(--color-negro);
+}
+
+#objetivos #frase {
+    background-color: var(--color-rosado);
+    color: var(--color-principal);
+}
+
+#voluntariado {
+    background-color: var(--color-rosado);
+}
+
+#tituloVoluntario {
+    color: var(--color-principal);
+}
+
+#textoVoluntario {
+    color: var(--color-oscuro);
+    text-align: center;
+}
+
+#botonVoluntario {
+    background-color: var(--color-principal);
+    color: var(--color-blanco);
+    border: none;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+#botonVoluntario:hover {
+    background-color: var(--color-principal);
+    color: var(--color-blanco);
+    transform: scale(1.05);
+}
+#cuidado {
+    background-color: var(--color-blanco);
+}
+
+#cuidado h2,
+#cuidado p {
+    color: var(--color-negro);
+}
+
+#impacto {
+    background-color: var(--color-blanco);
+}
+
+#impacto h3 {
+    background-color: var(--color-azul);
+    color: var(--color-blanco);
+}
+
+#impacto article {
+    color: var(--color-oscuro);
+}
+
+#impacto article h4 {
+    color: var(--color-oscuro);
+    font-weight: bold;
+}
+
+aside {
+    background-color: var(--color-rosado);
+    color: var(--color-oscuro);
+}
+
+#objetivos img,
+#cuidado img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+}
+
+#voluntariado img {
+    max-width: 780px;
+    width: 100%;
+    height: auto;
+}
+
+#impacto img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media (max-width: 767px) {
+    #impacto article {
+        margin-top: 0 !important;
+    }
+}
+
+.AreaImpacto{
+    transition: transform 0.3s;
+}
+
+.AreaImpacto:hover{
+    transform: scale(1.2);
+}
+
+
+
+.InicioVoluntariado{
+    transform-origin: bottom;
+    transition: transform 0.3s;
+}
+
+.InicioVoluntariado:hover{
+    transform: scale(1.05);
+    
+}

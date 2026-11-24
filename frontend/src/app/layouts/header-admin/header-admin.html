@@ -9,17 +9,17 @@
      
         <ul class="enlaces list-unstyled mb-0">
             <li>
-                <a routerLink="/panel-general" routerLinkActive="activo" ariaCurrentWhenActive="page">
+                <a routerLink="/admin/panel-general" routerLinkActive="activo" ariaCurrentWhenActive="page">
                     Panel General
                 </a>
             </li>
             <li>
-                <a routerLink="/adopciones" routerLinkActive="activo" ariaCurrentWhenActive="page">
+                <a routerLink="/admin/mascotas" routerLinkActive="activo" ariaCurrentWhenActive="page">
                     Adopciones
                 </a>
             </li>
             <li>
-                <a routerLink="/comida-recursos" routerLinkActive="activo" ariaCurrentWhenActive="page">
+                <a routerLink="/admin/comida-recursos" routerLinkActive="activo" ariaCurrentWhenActive="page">
                     Comida y Recursos
                 </a>
             </li>
@@ -43,11 +43,21 @@
             </div>
 
             <button type="button" class="btn boton-salir" (click)="salidaSolicitada.emit()">
-                Cerrar sesión
+                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
             </button>
             } @else {
-            <a routerLink="/iniciar-sesion" class="btn boton-salir">
-                Iniciar sesión
+
+            <div class="cuenta">
+                <img src="assets/ADMIN_FOTO.png" alt="" class="cuenta-foto">
+                <div class="cuenta-datos">
+                    <strong>Emilia</strong>
+                    <small>Administradora</small>
+                </div>
+            </div>
+
+                
+            <a routerLink="/inicio-sesion" class="btn boton-salir">
+                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
             </a>
             }
         </div>

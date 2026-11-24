@@ -9,7 +9,7 @@
         <div class="row justify-content-center">
             <div class="col-12 col-md-10 col-lg-7">
 
-                <form class="tarjeta-formulario">
+                <form class="tarjeta-formulario" novalidate (submit)="guardar($event)">
 
                     <div class="pasos">
                         <div class="circulo activo"><i class="bi bi-check-lg"></i></div>
@@ -24,34 +24,49 @@
                     <div class="campos">
 
                         <label for="motivo" class="form-label fw-bold">¿Por qué deseas adoptar a este perrito?</label>
-                        <input type="text" id="motivo" class="form-control" required>
+                        <input type="text" id="motivo" class="form-control" [formField]="solicitudFormulario.motivo">
+                        @if(solicitudFormulario.motivo().touched() || intentoEnvio()){
+                            @for(error of solicitudFormulario.motivo().errors(); track error){
+                                <p class="text-danger small mt-1 mb-0">{{error.message}}</p>
+                            }
+                        }
 
-                        <p class="titulo-grupo">Tipo de vivienda:</p>
+                        <p class="titulo-grupo">Tiempo disponible:</p>
                         <div class="form-check">
-                            <input type="radio" name="tiempo" id="tiempo1" class="form-check-input">
+                            <input type="radio" id="tiempo1" class="form-check-input" value="Sí, tengo tiempo todos los días" [formField]="solicitudFormulario.tiempoDisponible">
                             <label for="tiempo1" class="form-check-label">Sí, tengo tiempo todos los días</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" name="tiempo" id="tiempo2" class="form-check-input">
+                            <input type="radio" id="tiempo2" class="form-check-input" value="Solo fines de semana" [formField]="solicitudFormulario.tiempoDisponible">
                             <label for="tiempo2" class="form-check-label">Solo fines de semana</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" name="tiempo" id="tiempo3" class="form-check-input">
+                            <input type="radio" id="tiempo3" class="form-check-input" value="No dispongo de mucho tiempo" [formField]="solicitudFormulario.tiempoDisponible">
                             <label for="tiempo3" class="form-check-label">No dispongo de mucho tiempo</label>
                         </div>
+                        @if(solicitudFormulario.tiempoDisponible().touched() || intentoEnvio()){
+                            @for(error of solicitudFormulario.tiempoDisponible().errors(); track error){
+                                <p class="text-danger small mt-1 mb-0">{{error.message}}</p>
+                            }
+                        }
 
                         <p class="titulo-grupo">Declaración de compromiso:</p>
                         <div class="form-check caja-declaracion">
-                            <input type="checkbox" id="declaracion" class="form-check-input" required>
+                            <input type="checkbox" id="declaracion" class="form-check-input" [formField]="solicitudFormulario.compromiso">
                             <label for="declaracion" class="form-check-label">
                                 Confirmo que cuento con la estabilidad económica y el compromiso para garantizar la
                                 alimentación, salud y bienestar de la mascota, y acepto coordinar una entrevista previa.
                             </label>
                         </div>
+                        @if(solicitudFormulario.compromiso().touched() || intentoEnvio()){
+                            @for(error of solicitudFormulario.compromiso().errors(); track error){
+                                <p class="text-danger small mt-1 mb-0">{{error.message}}</p>
+                            }
+                        }
 
                         <div class="d-grid gap-2 caja-botones">
-                            <button type="button" class="btn boton-formulario" routerLink="/formulario-parte-2">ANTERIOR</button>
-                            <button type="submit" class="btn boton-formulario" routerLink="/formulario-parte-4">GUARDAR</button>
+                            <button type="button" class="btn boton-formulario" (click)="anterior()">ANTERIOR</button>
+                            <button type="submit" class="btn boton-formulario">GUARDAR</button>
                         </div>
 
                     </div>

@@ -18,42 +18,67 @@
             <div class="row">
 
                 <div class="col-12 col-lg-9">
-                    <form>
+                    <form novalidate (submit)="guardar($event)">
                         <div class="row">
 
                             <div class="col-12 col-md-6 mb-3">
                                 <label for="nombre" class="form-label fw-bold">Nombre y apellido <span class="obligatorio">*</span>:</label>
-                                <input type="text" id="nombre" class="form-control form-control-sm" placeholder="Escribe aquí tu nombre completo" required>
+                                <input type="text" id="nombre" class="form-control form-control-sm" placeholder="Escribe aquí tu nombre completo" [formField]="contactoFormulario.nombre">
+                                @if(contactoFormulario.nombre().touched() || intentoEnvio()){
+                                    @for(error of contactoFormulario.nombre().errors(); track error){
+                                        <p class="text-danger small mt-1 mb-0">{{error.message}}</p>
+                                    }
+                                }
                             </div>
 
                             <div class="col-12 col-md-6 mb-3">
                                 <label for="ciudad" class="form-label fw-bold">Ciudad:</label>
-                                <input type="text" id="ciudad" class="form-control form-control-sm" placeholder="Escribe la ciudad donde vives">
+                                <input type="text" id="ciudad" class="form-control form-control-sm" placeholder="Escribe la ciudad donde vives" [formField]="contactoFormulario.ciudad">
                             </div>
 
                             <div class="col-12 col-md-6 mb-3">
                                 <label for="correo" class="form-label fw-bold">Correo Electrónico <span class="obligatorio">*</span>:</label>
-                                <input type="email" id="correo" class="form-control form-control-sm" placeholder="Ej: tucorreo@servicio.com" required>
+                                <input type="email" id="correo" class="form-control form-control-sm" placeholder="Ej: tucorreo@servicio.com" [formField]="contactoFormulario.correo">
+                                @if(contactoFormulario.correo().touched() || intentoEnvio()){
+                                    @for(error of contactoFormulario.correo().errors(); track error){
+                                        <p class="text-danger small mt-1 mb-0">{{error.message}}</p>
+                                    }
+                                }
                             </div>
 
                             <div class="col-12 col-md-6 mb-3">
                                 <label for="telefono" class="form-label fw-bold">Teléfono:</label>
-                                <input type="tel" id="telefono" class="form-control form-control-sm" placeholder="Ej.: +51 925 178 310">
+                                <input type="tel" id="telefono" class="form-control form-control-sm" placeholder="Ej.: +51 925 178 310" [formField]="contactoFormulario.telefono">
                             </div>
 
                             <div class="col-12 mb-3">
                                 <label for="mensaje" class="form-label fw-bold">Mensaje <span class="obligatorio">*</span>:</label>
-                                <textarea id="mensaje" class="form-control form-control-sm" rows="4" placeholder="Redacta aquí tu mensaje para nosotros" required></textarea>
+                                <textarea id="mensaje" class="form-control form-control-sm" rows="4" placeholder="Redacta aquí tu mensaje para nosotros" [formField]="contactoFormulario.mensaje"></textarea>
+                                @if(contactoFormulario.mensaje().touched() || intentoEnvio()){
+                                    @for(error of contactoFormulario.mensaje().errors(); track error){
+                                        <p class="text-danger small mt-1 mb-0">{{error.message}}</p>
+                                    }
+                                }
                             </div>
 
                             <div class="col-12 mb-3">
                                 <div class="caja-captcha form-check">
-                                    <input type="checkbox" id="robot" class="form-check-input" required>
+                                    <input type="checkbox" id="robot" class="form-check-input" [formField]="contactoFormulario.robot">
                                     <label for="robot" class="form-check-label">No soy un robot</label>
-                                <img src="/assets/RECAPTCHA.png" alt="" class="referencial">
+                                    <img src="/assets/RECAPTCHA.png" alt="" class="referencial">
                                 </div>
-
+                                @if(contactoFormulario.robot().touched() || intentoEnvio()){
+                                    @for(error of contactoFormulario.robot().errors(); track error){
+                                        <p class="text-danger small mt-1 mb-0">{{error.message}}</p>
+                                    }
+                                }
                             </div>
+
+                            @if(mensajeEnviado()){
+                                <div class="col-12 mb-3">
+                                    <div class="alert alert-success mb-0">¡Mensaje enviado! Te responderemos pronto.</div>
+                                </div>
+                            }
 
                             <div class="col-12">
                                 <button type="submit" class="btn boton-enviar w-100">Enviar</button>

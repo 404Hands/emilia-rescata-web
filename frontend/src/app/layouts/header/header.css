@@ -19,6 +19,11 @@ header{
 .logo{
     width: 48px;
     height: 59px;
+    transition: transform 0.3s;
+}
+
+.logo:hover{
+    transform: scale(1.05);
 }
 
 ul{

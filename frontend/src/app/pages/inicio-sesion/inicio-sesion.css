@@ -122,13 +122,14 @@ label{
     background-color: var(--color-login-boton);
     color: #ffffff;
     border-color: var(--color-login-boton);
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.3s;
 }
 
 .boton-login:hover{
     background-color: var(--color-login-boton-hover);
     border-color: var(--color-login-boton-hover);
     color: #ffffff;
+    transform: scale(1.02);
 }
 
 .icono-patita{
