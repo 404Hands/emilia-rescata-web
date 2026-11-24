@@ -23,6 +23,7 @@ import { FormularioParte4 } from './pages/formulario-parte-4/formulario-parte-4'
 import { VisualMascota } from './pages/visual-mascota/visual-mascota';
 import { LayoutAdministrar } from './layouts/layout-administrar/layout-administrar';
 import { ComidaRecursos } from './pages/comida-recursos/comida-recursos';
+import { Registro } from './pages/registro/registro';
 
 export const routes: Routes = [
   {
@@ -37,11 +38,7 @@ export const routes: Routes = [
       { path: 'proceso-donacion', component: ProcesoDonacion },
       { path: 'datos-donacion', component: DatosDonacion },
       { path: 'contacto', component: Contacto },
-      { path: 'mascotas', component: Mascotas },
-      { path: 'inicio', component:Inicio},
-      { path: 'sobre-nosotros', component:SobreNosotros},
-      { path: 'adopciones', component:Adopciones},
-      { path: 'donaciones', component:Donaciones}
+      { path: 'mascotas', component: Mascotas }
     ]
   },
 
@@ -62,6 +59,14 @@ export const routes: Routes = [
     component: LayoutInicioSesion,
     children: [
       { path: '', component: InicioSesion }
+    ]
+  },
+
+  {
+    path: 'registro',
+    component: LayoutInicioSesion,
+    children: [
+      { path: '', component: Registro }
     ]
   },
 

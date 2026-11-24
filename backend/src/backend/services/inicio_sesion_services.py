@@ -2,13 +2,12 @@ import hashlib
 import hmac
 import secrets
 from ..repositories.inicio_sesion_repository import InicioSesionRepositorio
-from ..schemas.inicio_sesion_schema import InicioSesion, Usuario, UsuarioRespuesta
+from ..schemas.inicio_sesion_schema import InicioSesion, Registro, Usuario, UsuarioRespuesta
 
 class InicioSesionServicio:
     def __init__(self):
         self.__inicioSesionRepositorio = InicioSesionRepositorio()
         self.__inicioSesionRepositorio.guardarUsuario(Usuario(
-            id=1,
             nombre='Emilia',
             correo='EmiliaRescata@gmail.com',
             claveHash=self.__hashearClave('Emilia123'),
@@ -35,6 +34,26 @@ class InicioSesionServicio:
                 nombre=usuario.nombre,
                 correo=usuario.correo,
                 rol=usuario.rol
+            )
+        except Exception as e:
+            raise e
+
+    def registrarUsuario(self, datos: Registro):
+        try:
+            if self.__inicioSesionRepositorio.buscarPorCorreo(datos.correo) is not None:
+                return None
+            usuarioNuevo = Usuario(
+                nombre=datos.nombre,
+                correo=datos.correo,
+                claveHash=self.__hashearClave(datos.clave),
+                rol='Usuario'
+            )
+            usuarioGuardado = self.__inicioSesionRepositorio.guardarUsuario(usuarioNuevo)
+            return UsuarioRespuesta(
+                id=usuarioGuardado.id,
+                nombre=usuarioGuardado.nombre,
+                correo=usuarioGuardado.correo,
+                rol=usuarioGuardado.rol
             )
         except Exception as e:
             raise e

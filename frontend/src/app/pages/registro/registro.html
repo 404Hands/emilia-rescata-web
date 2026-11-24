@@ -1,0 +1,117 @@
+<main>
+  <div class="container">
+    <div class="caja-borde">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+          <form class="tarjeta-login" novalidate (submit)="registrar($event)">
+            <div class="caja-icono">
+              <img src="/assets/INICIO_SESION_LLAVE.png" alt="Llave" class="icono-llave" />
+            </div>
+
+            <p class="texto-bienvenida">
+              Crea tu cuenta para administrar a nuestros perritos y solicitudes.
+            </p>
+
+            <div class="mb-3">
+              <label for="nombre">Nombre completo</label>
+              <div class="input-group caja-input">
+                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                <input
+                  type="text"
+                  id="nombre"
+                  class="form-control"
+                  placeholder="Ej: María Pérez López"
+                  [formField]="registroFormulario.nombre"
+                />
+              </div>
+              @if (registroFormulario.nombre().touched() || intentoEnvio()) {
+                @for (error of registroFormulario.nombre().errors(); track error) {
+                  <p class="text-danger small mt-1 mb-0">{{ error.message }}</p>
+                }
+              }
+            </div>
+
+            <div class="mb-3">
+              <label for="correo">Correo electrónico</label>
+              <div class="input-group caja-input">
+                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                <input
+                  type="email"
+                  id="correo"
+                  class="form-control"
+                  placeholder="tucorreo@gmail.com"
+                  [formField]="registroFormulario.correo"
+                />
+              </div>
+              @if (registroFormulario.correo().touched() || intentoEnvio()) {
+                @for (error of registroFormulario.correo().errors(); track error) {
+                  <p class="text-danger small mt-1 mb-0">{{ error.message }}</p>
+                }
+              }
+            </div>
+
+            <div class="mb-3">
+              <label for="clave">Contraseña</label>
+              <div class="input-group caja-input">
+                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                <input
+                  [type]="mostrarClave ? 'text' : 'password'"
+                  id="clave"
+                  class="form-control"
+                  placeholder="Mínimo 8 caracteres"
+                  [formField]="registroFormulario.clave"
+                />
+                <span class="input-group-text ojo" (click)="mostrarClave = !mostrarClave">
+                  <i
+                    class="bi"
+                    [class.bi-eye]="!mostrarClave"
+                    [class.bi-eye-slash]="mostrarClave"
+                  ></i>
+                </span>
+              </div>
+              @if (registroFormulario.clave().touched() || intentoEnvio()) {
+                @for (error of registroFormulario.clave().errors(); track error) {
+                  <p class="text-danger small mt-1 mb-0">{{ error.message }}</p>
+                }
+              }
+            </div>
+
+            <div class="mb-3">
+              <label for="confirmarClave">Confirmar contraseña</label>
+              <div class="input-group caja-input">
+                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                <input
+                  [type]="mostrarClave ? 'text' : 'password'"
+                  id="confirmarClave"
+                  class="form-control"
+                  placeholder="Repite tu contraseña"
+                  [formField]="registroFormulario.confirmarClave"
+                />
+              </div>
+              @if (registroFormulario.confirmarClave().touched() || intentoEnvio()) {
+                @for (error of registroFormulario.confirmarClave().errors(); track error) {
+                  <p class="text-danger small mt-1 mb-0">{{ error.message }}</p>
+                }
+              }
+            </div>
+
+            <button type="submit" class="btn boton-login w-100">
+              Crear cuenta
+              <img src="/assets/INICIO_SESION_HUELLITA.png" alt="Patita" class="icono-patita" />
+            </button>
+
+            <button
+              type="button"
+              class="btn boton-registrar w-100 mt-2"
+              routerLink="/inicio-sesion"
+            >
+              Ya tengo una cuenta
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <p class="frase">"Salvar a un animal no cambiará el mundo, pero cambiará su mundo entero."</p>
+    </div>
+  </div>
+</main>

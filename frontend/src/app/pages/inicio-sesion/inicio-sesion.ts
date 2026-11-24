@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 
 @Component({
-  imports: [FormField, ],
+  imports: [FormField, RouterLink],
   selector: 'app-inicio-sesion',
   styleUrl: './inicio-sesion.css',
   templateUrl: './inicio-sesion.html',
