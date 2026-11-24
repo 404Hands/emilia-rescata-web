@@ -22,3 +22,6 @@ class UsuarioRespuesta(BaseModel):
     nombre: str
     correo: EmailStr
     rol: str
+
+class SesionRespuesta(UsuarioRespuesta):
+    token: str

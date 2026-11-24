@@ -1,6 +1,6 @@
 from fractions import Fraction
-from threading import Lock
 
+from backend.database import conectar, filas
 from backend.schemas.recursos import Ingreso, IngresoDatos, Producto, ProductoConIngreso, ProductoId
 
 
@@ -17,144 +17,92 @@ class SaldoFueraDeRangoError(Exception):
 
 
 class RecursoRepository:
-    def __init__(self) -> None:
-        self._lock = Lock()
-        self._ingresos: dict[int, Ingreso] = {}
-        self._siguiente_ingreso_id = 1
-
-        productos = [
-            Producto(
-                id="adultos",
-                nombre="Comida Perros Adultos",
-                cantidad=12,
-                unidad="saco",
-                plural="sacos",
-                kgPorUnidad=20,
-                minimo=3,
-                detalle="Alimento para perros adultos",
-            ),
-            Producto(
-                id="cachorros",
-                nombre="Comida Cachorros (Puppy)",
-                cantidad=3,
-                unidad="saco",
-                plural="sacos",
-                kgPorUnidad=20,
-                minimo=3,
-                detalle="Alimento para cachorros",
-            ),
-            Producto(
-                id="especial",
-                nombre="Comida Especial / Hipoalergénica",
-                cantidad=5,
-                unidad="saco",
-                plural="sacos",
-                kgPorUnidad=24,
-                minimo=2,
-                detalle="Para perritos con dieta delicada",
-            ),
-            Producto(
-                id="latas",
-                nombre="Latas de Comida Húmeda / Paté",
-                cantidad=48,
-                unidad="lata",
-                plural="latas",
-                minimo=10,
-                detalle="Para premios y medicamentos",
-            ),
-            Producto(
-                id="desinfectante",
-                nombre="Desinfectante de Caniles",
-                cantidad=2,
-                unidad="bidón",
-                plural="bidones",
-                minimo=2,
-                detalle="Para el lavado de patios",
-            ),
-        ]
-
-        self._productos = {producto.id: producto for producto in productos}
-
-        self._saldos = {p.id: Fraction(str(p.cantidad)) for p in productos}
-
-    def listar(self) -> list[Producto]:
-        with self._lock:
-            return list(self._productos.values())
-
-    def obtener(self, producto_id: ProductoId) -> Producto:
-        with self._lock:
-            return self._productos[producto_id]
-
-    def listar_ingresos(self) -> list[Ingreso]:
-        with self._lock:
-            return list(self._ingresos.values())
-
-    def _envases(self, ingreso: Ingreso) -> Fraction:
-        cantidad = Fraction(str(ingreso.cantidad))
-        if ingreso.unidad == "kg":
-            peso = self._productos[ingreso.productoId].kgPorUnidad
-            if peso is None:
-                raise ValueError("Este producto se registra por envase.")
-            return cantidad / Fraction(str(peso))
-        return cantidad
-
-    def _aplicar(self, cambios: dict[ProductoId, Fraction]) -> None:
-        # Validar todos los saldos antes de modificar cualquiera de ellos.
-        saldos = {}
+    def _productos(self, cursor, escritura: bool = False) -> dict[ProductoId, Producto]:
+        # Los cambios de stock y de ingresos usan el mismo bloqueo hasta el commit.
+        bloqueo = "TABLOCKX, HOLDLOCK" if escritura else "TABLOCK, HOLDLOCK"
+        cursor.execute(f"SELECT * FROM dbo.Productos WITH ({bloqueo}) ORDER BY orden")
+        datos = filas(cursor)
         productos = {}
-        for clave, cambio in cambios.items():
-            saldo = self._saldos[clave] + cambio
+        saldos = {}
+        for fila in datos:
+            clave = fila["id"]
+            saldos[clave] = Fraction(fila.pop("cantidadInicial") - fila.pop("consumos"))
+            productos[clave] = fila
+
+        for ingreso in self._ingresos(cursor):
+            clave = ingreso.productoId
+            cantidad = Fraction(str(ingreso.cantidad))
+            if ingreso.unidad == "kg":
+                cantidad /= Fraction(str(productos[clave]["kgPorUnidad"]))
+            saldos[clave] += cantidad
+
+        resultado = {}
+        for clave, fila in productos.items():
+            saldo = saldos[clave]
             if saldo < 0:
-                raise StockInsuficienteError(
-                    f"Stock insuficiente de {self._productos[clave].nombre}."
-                )
+                raise StockInsuficienteError(f"Stock insuficiente de {fila['nombre']}.")
             try:
                 cantidad = float(saldo)
             except OverflowError as exc:
                 raise SaldoFueraDeRangoError(
-                    f"El saldo de {self._productos[clave].nombre} supera el máximo admitido."
+                    f"El saldo de {fila['nombre']} supera el máximo admitido."
                 ) from exc
-            saldos[clave] = saldo
-            productos[clave] = self._productos[clave].model_copy(
-                update={"cantidad": cantidad}
-            )
-        self._saldos.update(saldos)
-        self._productos.update(productos)
+            resultado[clave] = Producto(**fila, cantidad=cantidad)
+        return resultado
+
+    def _ingresos(self, cursor) -> list[Ingreso]:
+        cursor.execute("SELECT * FROM dbo.Ingresos ORDER BY ingreso_id")
+        return [Ingreso(**fila) for fila in filas(cursor)]
+
+    def listar(self) -> list[Producto]:
+        with conectar() as cursor:
+            return list(self._productos(cursor).values())
+
+    def obtener(self, producto_id: ProductoId) -> Producto:
+        with conectar() as cursor:
+            return self._productos(cursor)[producto_id]
+
+    def listar_ingresos(self) -> list[Ingreso]:
+        with conectar() as cursor:
+            return self._ingresos(cursor)
 
     def usar_uno(self, clave: ProductoId) -> Producto:
-        with self._lock:
-            self._aplicar({clave: Fraction(-1)})
-            return self._productos[clave]
+        with conectar() as cursor:
+            self._productos(cursor, escritura=True)
+            cursor.execute("UPDATE dbo.Productos SET consumos = consumos + 1 WHERE id = ?", clave)
+            return self._productos(cursor)[clave]
 
     def crear_ingreso(self, datos: IngresoDatos) -> ProductoConIngreso:
-        with self._lock:
-            ingreso = Ingreso(ingreso_id=self._siguiente_ingreso_id, **datos.model_dump())
-            self._aplicar({ingreso.productoId: self._envases(ingreso)})
-            self._ingresos[ingreso.ingreso_id] = ingreso
-            self._siguiente_ingreso_id += 1
-            producto = self._productos[ingreso.productoId]
-            return ProductoConIngreso(**producto.model_dump(), ingreso_id=ingreso.ingreso_id)
-
-    def _buscar_ingreso(self, ingreso_id: int) -> Ingreso:
-        anterior = self._ingresos.get(ingreso_id)
-        if anterior is None:
-            raise IngresoNoEncontradoError("El ingreso solicitado no existe.")
-        return anterior
+        with conectar() as cursor:
+            self._productos(cursor, escritura=True)
+            cursor.execute(
+                """INSERT INTO dbo.Ingresos (productoId, cantidad, unidad)
+                   OUTPUT INSERTED.ingreso_id VALUES (?, ?, ?)""",
+                datos.productoId, datos.cantidad, datos.unidad,
+            )
+            ingreso_id = cursor.fetchone()[0]
+            producto = self._productos(cursor)[datos.productoId]
+            return ProductoConIngreso(**producto.model_dump(), ingreso_id=ingreso_id)
 
     def editar_ingreso(self, nuevo: Ingreso) -> Ingreso:
-        with self._lock:
-            anterior = self._buscar_ingreso(nuevo.ingreso_id)
-            cambios = {anterior.productoId: -self._envases(anterior)}
-            cambios[nuevo.productoId] = cambios.get(nuevo.productoId, Fraction(0)) + self._envases(nuevo)
-            self._aplicar(cambios)
-            self._ingresos[nuevo.ingreso_id] = nuevo
+        with conectar() as cursor:
+            self._productos(cursor, escritura=True)
+            cursor.execute(
+                "UPDATE dbo.Ingresos SET productoId = ?, cantidad = ?, unidad = ? WHERE ingreso_id = ?",
+                nuevo.productoId, nuevo.cantidad, nuevo.unidad, nuevo.ingreso_id,
+            )
+            if not cursor.rowcount:
+                raise IngresoNoEncontradoError("El ingreso solicitado no existe.")
+            self._productos(cursor)
             return nuevo
 
     def eliminar_ingreso(self, ingreso_id: int) -> None:
-        with self._lock:
-            anterior = self._buscar_ingreso(ingreso_id)
-            self._aplicar({anterior.productoId: -self._envases(anterior)})
-            del self._ingresos[ingreso_id]
+        with conectar() as cursor:
+            self._productos(cursor, escritura=True)
+            cursor.execute("DELETE FROM dbo.Ingresos WHERE ingreso_id = ?", ingreso_id)
+            if not cursor.rowcount:
+                raise IngresoNoEncontradoError("El ingreso solicitado no existe.")
+            self._productos(cursor)
 
 
 recurso_repository = RecursoRepository()

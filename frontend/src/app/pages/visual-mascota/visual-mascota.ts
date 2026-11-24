@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, signal } from '@angular/core';
-import { form, FormField, min, required } from '@angular/forms/signals';
+import { form, FormField, maxLength, min, required } from '@angular/forms/signals';
 
 import type {
   MascotaCreacion,
@@ -17,6 +17,7 @@ function mascotaVacia(): MascotaFormulario {
   return {
     nombre: '',
     raza: '',
+    especie: 'Perro',
     edad: null,
     sexo: '',
     tamano: '',
@@ -56,6 +57,10 @@ export class VisualMascota implements OnDestroy {
 
     required(campos.raza, {
       message: 'Escribe la raza de la mascota.',
+    });
+
+    maxLength(campos.especie, 50, {
+      message: 'Escribe una especie de hasta 50 caracteres.',
     });
 
     required(campos.edad, {
@@ -120,6 +125,7 @@ export class VisualMascota implements OnDestroy {
       const campos = [
         this.ficha.nombre(),
         this.ficha.raza(),
+        this.ficha.especie(),
         this.ficha.edad(),
       ];
 
@@ -142,7 +148,11 @@ export class VisualMascota implements OnDestroy {
     );
 
     const { edad, ...resto } = this.mascota();
-    const ficha: MascotaCreacion = { ...resto, edad: edad ?? 0 };
+    const ficha: MascotaCreacion = {
+      ...resto,
+      edad: edad ?? 0,
+      especie: resto.especie.trim() || 'Perro',
+    };
 
     this.enviando.set(true);
     this.mensaje.set('');

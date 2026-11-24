@@ -64,6 +64,11 @@
     margin: 0;
 }
 
+.datos-mascota {
+    overflow-wrap: anywhere;
+    text-align: left;
+}
+
 .boton-ver-mas{
     background-color: var(--color-boton-mascotas);
     color: #ffffff;

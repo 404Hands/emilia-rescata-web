@@ -49,6 +49,24 @@
             <img [src]="foto(mascota)" [alt]="mascota.nombre" class="foto-perro" />
             <h5>{{ mascota.nombre }}</h5>
             <p>{{ mascota.edad }} {{ mascota.edad === 1 ? 'año' : 'años' }}</p>
+            <div class="datos-mascota mt-2">
+              <p><strong>Raza</strong> {{ mascota.raza }}</p>
+              <p><strong>Especie</strong> {{ mascota.especie }}</p>
+              <p><strong>Sexo</strong> {{ sexos[mascota.sexo] }}</p>
+              <p><strong>Tamaño</strong> {{ tamanos[mascota.tamano] }}</p>
+              <p><strong>Características</strong> {{ caracteristicas(mascota) || 'Sin indicar' }}</p>
+              <p><strong>Descripción</strong> {{ mascota.historia || 'Sin indicar' }}</p>
+              <p><strong>Vacunado</strong> {{ mascota.vacunado ? 'Sí' : 'No' }}</p>
+              <p><strong>Desparasitado</strong> {{ mascota.desparasitado ? 'Sí' : 'No' }}</p>
+              <p><strong>Esterilizado</strong> {{ mascota.esterilizado ? 'Sí' : 'No' }}</p>
+              @for (posicion of fotosExtra; track posicion) {
+                @if (mascota.fotos[posicion]) {
+                  <a class="d-inline-block m-1" [href]="mascotaService.urlFoto(mascota.id, posicion)">
+                    Foto {{ posicion + 1 }}
+                  </a>
+                }
+              }
+            </div>
             <button class="boton-adoptar" routerLink="/formulario-parte-1">Adoptar</button>
           </div>
         </div>

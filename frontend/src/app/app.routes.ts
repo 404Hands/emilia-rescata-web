@@ -1,5 +1,7 @@
 
-import { Routes } from '@angular/router';
+import { inject } from '@angular/core';
+import { Router, Routes } from '@angular/router';
+import { AutenticacionService } from './services/autenticacion';
 
 import { LayoutPublico } from './layouts/layout-publico/layout-publico';
 import { LayoutInicioSesion } from './layouts/layout-inicio-sesion/layout-inicio-sesion';
@@ -46,6 +48,10 @@ export const routes: Routes = [
   {
     path: '',
     component: LayoutAdministrar,
+    canActivateChild: [() =>
+      inject(AutenticacionService).token() !== null ||
+      inject(Router).createUrlTree(['/inicio-sesion'])
+    ],
     children: [
       {path: 'admin/comida-recursos', component:ComidaRecursos},
       {path: 'admin/panel-general', component:VisualMascota},

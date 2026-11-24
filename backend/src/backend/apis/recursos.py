@@ -1,7 +1,8 @@
 from typing import Annotated
 
-from fastapi import APIRouter, HTTPException, Path, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Path, Response, status
 
+from .inicio_sesion_api import verificar_sesion
 from backend.repositories.recursos import (
     IngresoNoEncontradoError,
     SaldoFueraDeRangoError,
@@ -11,7 +12,7 @@ from backend.schemas.recursos import Ingreso, IngresoDatos, Producto, ProductoCo
 from backend.services.recursos import IngresoInvalidoError, recurso_service
 
 
-router = APIRouter(prefix="/recursos", tags=["Comida y Recursos"])
+router = APIRouter(prefix="/recursos", tags=["Comida y Recursos"], dependencies=[Depends(verificar_sesion)])
 IngresoId = Annotated[int, Path(gt=0)]
 
 

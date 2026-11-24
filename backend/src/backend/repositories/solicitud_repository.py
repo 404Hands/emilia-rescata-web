@@ -1,28 +1,26 @@
+from ..database import conectar, filas
 from ..schemas.solicitud_schema import Solicitud
 
-class SolicitudRepositorio:
-    def __init__(self):
-        self.__listaSolicitudes: list[Solicitud] = []
-        self.__ultimoId = 0
 
-    def guardarSolicitud(self, solicitudNueva: Solicitud):
-        try:
-            self.__ultimoId += 1
-            solicitudNueva.id = self.__ultimoId
-            self.__listaSolicitudes.append(solicitudNueva)
-            return solicitudNueva
-        except Exception as e:
-            raise e
+class SolicitudRepositorio:
+    def guardarSolicitud(self, nuevo: Solicitud):
+        datos = nuevo.model_dump(exclude={"id"})
+        with conectar() as cursor:
+            cursor.execute(
+                """INSERT INTO dbo.Solicitudes
+                   (nombre, celular, distrito, tipoVivienda, propiedadVivienda, hayNinos, otrasMascotas, motivo, tiempoDisponible, compromiso)
+                   OUTPUT INSERTED.id
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                *datos.values(),
+            )
+            return Solicitud(id=cursor.fetchone()[0], **datos)
 
     def mostrarSolicitudes(self):
-        return self.__listaSolicitudes
+        with conectar() as cursor:
+            cursor.execute("SELECT * FROM dbo.Solicitudes ORDER BY id")
+            return [Solicitud(**fila) for fila in filas(cursor)]
 
     def eliminarSolicitud(self, id: int):
-        try:
-            for indice, valor in enumerate(self.__listaSolicitudes):
-                if valor.id == id:
-                    self.__listaSolicitudes.pop(indice)
-                    return id
-            return None
-        except Exception as e:
-            raise e
+        with conectar() as cursor:
+            cursor.execute("DELETE FROM dbo.Solicitudes WHERE id = ?", id)
+            return id if cursor.rowcount else None

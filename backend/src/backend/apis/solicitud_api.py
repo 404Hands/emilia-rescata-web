@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
+from .inicio_sesion_api import verificar_sesion
 from ..services.solicitud_services import SolicitudServicio
 from ..schemas.solicitud_schema import Solicitud
 
@@ -13,11 +14,11 @@ def guardarSolicitud(solicitudNueva: Solicitud):
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-@rutasSolicitud.get('/')
+@rutasSolicitud.get('/', dependencies=[Depends(verificar_sesion)])
 def mostrarSolicitudes():
     return SolicitudServicio.mostrarSolicitudes()
 
-@rutasSolicitud.delete('/{id}')
+@rutasSolicitud.delete('/{id}', dependencies=[Depends(verificar_sesion)])
 def eliminarSolicitud(id: int):
     try:
         return SolicitudServicio.eliminarSolicitud(id)

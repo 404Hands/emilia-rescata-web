@@ -19,6 +19,7 @@ class MascotaBase(BaseModel):
 
     nombre: str = Field(min_length=1)
     raza: str = Field(min_length=1)
+    especie: str = Field(default="Perro", min_length=1, max_length=50)
     edad: int = Field(ge=0)
 
     sexo: Literal["", "macho", "hembra"] = ""
