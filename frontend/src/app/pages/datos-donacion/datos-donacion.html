@@ -131,7 +131,7 @@
 
                     </div>
 
-                    @if (metodoPago() === 'BCP' || metodoPago() === 'Banco de la Nación' || metodoPago() === 'BBVA') {
+                    @if (esTarjeta()) {
                     <section class="formulario-pago mt-4">
                         <h3>Datos de tu tarjeta</h3>
 
@@ -147,9 +147,13 @@
                                 </label>
 
                                 <input id="numeroTarjeta" type="text" class="form-control"
+                                    [class.is-invalid]="erroresTarjeta().numero"
                                     placeholder="0000 0000 0000 0000" inputmode="numeric" maxlength="19"
                                     autocomplete="off" [value]="numeroTarjeta()"
                                     (input)="actualizarTarjeta('numero', $event)">
+                                @if (erroresTarjeta().numero) {
+                                <small class="text-danger">{{ erroresTarjeta().numero }}</small>
+                                }
                             </div>
 
                             <div class="col-12">
@@ -158,8 +162,12 @@
                                 </label>
 
                                 <input id="titularTarjeta" type="text" class="form-control"
+                                    [class.is-invalid]="erroresTarjeta().titular"
                                     placeholder="Nombre como aparece en la tarjeta" autocomplete="off"
                                     [value]="titularTarjeta()" (input)="actualizarTarjeta('titular', $event)">
+                                @if (erroresTarjeta().titular) {
+                                <small class="text-danger">{{ erroresTarjeta().titular }}</small>
+                                }
                             </div>
 
                             <div class="col-6">
@@ -167,17 +175,25 @@
                                     Fecha de vencimiento
                                 </label>
 
-                                <input id="fechaVencimiento" type="text" class="form-control" placeholder="MM/AA"
-                                    maxlength="5" autocomplete="off" [value]="fechaVencimiento()"
-                                    (input)="actualizarTarjeta('fecha', $event)">
+                                <input id="fechaVencimiento" type="text" class="form-control"
+                                    [class.is-invalid]="erroresTarjeta().fecha"
+                                    placeholder="MM/AA" maxlength="5" autocomplete="off"
+                                    [value]="fechaVencimiento()" (input)="actualizarTarjeta('fecha', $event)">
+                                @if (erroresTarjeta().fecha) {
+                                <small class="text-danger">{{ erroresTarjeta().fecha }}</small>
+                                }
                             </div>
 
                             <div class="col-6">
                                 <label for="cvv" class="form-label">CVV</label>
 
-                                <input id="cvv" type="password" class="form-control" placeholder="123"
-                                    inputmode="numeric" maxlength="4" autocomplete="off" [value]="cvv()"
-                                    (input)="actualizarTarjeta('cvv', $event)">
+                                <input id="cvv" type="password" class="form-control"
+                                    [class.is-invalid]="erroresTarjeta().cvv"
+                                    placeholder="123" inputmode="numeric" maxlength="4" autocomplete="off"
+                                    [value]="cvv()" (input)="actualizarTarjeta('cvv', $event)">
+                                @if (erroresTarjeta().cvv) {
+                                <small class="text-danger">{{ erroresTarjeta().cvv }}</small>
+                                }
                             </div>
 
                         </div>
@@ -260,3 +276,29 @@
         </div>
     </section>
 </main>
+
+@if (donacionExitosa()) {
+<div class="fondo-exito" role="dialog" aria-modal="true" aria-labelledby="titulo-exito">
+    <div class="tarjeta-exito">
+
+        <div class="icono-check">
+            <svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="currentColor" stroke-width="3"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="5 13 10 18 19 7"></polyline>
+            </svg>
+        </div>
+
+        <h2 id="titulo-exito">¡Donación realizada!</h2>
+
+        <p>
+            Gracias por tu aporte de <strong>S/ {{ monto().toFixed(2) }}</strong>.
+            Con tu ayuda seguimos cuidando y protegiendo a nuestros animales.
+        </p>
+
+        <a routerLink="/donaciones" class="btn-continuar w-100 text-decoration-none">
+            Volver
+        </a>
+
+    </div>
+</div>
+}

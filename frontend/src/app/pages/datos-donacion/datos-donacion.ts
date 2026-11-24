@@ -1,4 +1,3 @@
-
 import { Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Donacion } from '../../interfaces/donacion';
@@ -28,6 +27,12 @@ export class DatosDonacion {
   cvv = signal('');
   correoPayPal = signal('');
 
+  metodoSeleccionado = signal<Donacion['metodoPago']>('');
+
+  erroresTarjeta = signal({ numero: '', titular: '', fecha: '', cvv: '' });
+
+  donacionExitosa = signal(false);
+
   mensaje = signal('');
   tipoMensaje = signal<'error' | 'info'>('error');
 
@@ -40,6 +45,11 @@ export class DatosDonacion {
 
   constructor(private donacionService: DonacionService) {
     this.modelo = this.donacionService.mostrarDonaciones();
+
+    const donaciones = this.modelo();
+    if (donaciones.length > 0) {
+      this.metodoSeleccionado.set(donaciones[donaciones.length - 1].metodoPago);
+    }
   }
 
   monto(): number {
@@ -51,11 +61,11 @@ export class DatosDonacion {
   }
 
   metodoPago(): Donacion['metodoPago'] {
-    const donaciones = this.modelo();
+    return this.metodoSeleccionado();
+  }
 
-    return donaciones.length > 0
-      ? donaciones[donaciones.length - 1].metodoPago
-      : '';
+  esTarjeta(): boolean {
+    return this.metodoPago() !== 'PayPal' && this.metodoPago() !== '';
   }
 
   actualizarCampo(campo: string, event: Event): void {
@@ -112,6 +122,7 @@ export class DatosDonacion {
         break;
     }
 
+    this.erroresTarjeta.update(e => ({ ...e, [campo]: '' }));
     this.mensaje.set('');
   }
 
@@ -124,6 +135,7 @@ export class DatosDonacion {
   }
 
   seleccionarMetodo(metodo: Donacion['metodoPago']): void {
+    this.metodoSeleccionado.set(metodo);
     this.donacionService.actualizarMetodoPago(metodo);
 
     this.numeroTarjeta.set('');
@@ -131,6 +143,7 @@ export class DatosDonacion {
     this.fechaVencimiento.set('');
     this.cvv.set('');
     this.correoPayPal.set('');
+    this.erroresTarjeta.set({ numero: '', titular: '', fecha: '', cvv: '' });
 
     this.mensaje.set('');
   }
@@ -170,25 +183,46 @@ export class DatosDonacion {
         return;
       }
     } else {
-      const numero = this.numeroTarjeta().replace(/\s/g, '');
-
-      if (
-        !/^\d{13,19}$/.test(numero) ||
-        !this.titularTarjeta().trim() ||
-        !/^(0[1-9]|1[0-2])\/\d{2}$/.test(this.fechaVencimiento()) ||
-        !/^\d{3,4}$/.test(this.cvv())
-      ) {
-        this.mostrarError(
-          'Completa correctamente los datos de la tarjeta.'
-        );
+      if (!this.validarTarjeta()) {
+        this.mostrarError('Revisa los datos de la tarjeta marcados en rojo.');
         return;
       }
     }
 
-    this.tipoMensaje.set('info');
-    this.mensaje.set(
-      'Formulario completado correctamente. Esta es una demostración: todavía no se ha realizado ningún pago.'
-    );
+    this.mensaje.set('');
+    this.donacionExitosa.set(true);
+  }
+
+  private validarTarjeta(): boolean {
+    const numero = this.numeroTarjeta().replace(/\s/g, '');
+    const errores = { numero: '', titular: '', fecha: '', cvv: '' };
+
+    if (!numero) {
+      errores.numero = 'Escribe el número de tu tarjeta.';
+    } else if (!/^\d+$/.test(numero)) {
+      errores.numero = 'El número solo debe tener dígitos.';
+    } else if (numero.length < 13 || numero.length > 19) {
+      errores.numero = 'El número debe tener entre 13 y 19 dígitos.';
+    }
+
+    if (!this.titularTarjeta().trim()) {
+      errores.titular = 'Escribe el nombre del titular.';
+    }
+
+    if (!this.fechaVencimiento().trim()) {
+      errores.fecha = 'Escribe la fecha de vencimiento.';
+    } else if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(this.fechaVencimiento())) {
+      errores.fecha = 'Usa el formato MM/AA, por ejemplo 08/28.';
+    }
+
+    if (!this.cvv().trim()) {
+      errores.cvv = 'Escribe el CVV.';
+    } else if (!/^\d{3,4}$/.test(this.cvv())) {
+      errores.cvv = 'El CVV debe tener 3 o 4 dígitos.';
+    }
+
+    this.erroresTarjeta.set(errores);
+    return !Object.values(errores).some(e => e);
   }
 
   private mostrarError(mensaje: string): void {
