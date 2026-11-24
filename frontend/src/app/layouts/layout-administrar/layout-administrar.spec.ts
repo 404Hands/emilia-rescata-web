@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { LayoutAdministrar } from './layout-administrar';
 
 describe('LayoutAdministrar', () => {
@@ -8,6 +9,7 @@ describe('LayoutAdministrar', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LayoutAdministrar],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LayoutAdministrar);

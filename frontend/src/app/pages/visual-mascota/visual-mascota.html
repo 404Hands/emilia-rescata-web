@@ -315,8 +315,8 @@
       </div>
 
       <div class="accion-publicar text-center mt-4">
-        <button type="submit" class="btn boton-publicar">
-          Publicar en la página principal
+        <button type="submit" class="btn boton-publicar" [disabled]="enviando()">
+          {{ enviando() ? 'Publicando...' : 'Publicar en la página principal' }}
         </button>
 
         <p class="mt-2 mb-0" role="status">{{ mensaje() }}</p>

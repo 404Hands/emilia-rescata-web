@@ -234,9 +234,9 @@
                         </div>
 
                         <div class="col-12 col-md-7">
-                            <button type="button" class="btn-continuar w-100" [disabled]="!metodoPago()"
+                            <button type="button" class="btn-continuar w-100" [disabled]="!metodoPago() || enviando()"
                                 (click)="confirmarDonacion()">
-                                Completar donación
+                                {{ enviando() ? 'Procesando donación...' : 'Completar donación' }}
                             </button>
                         </div>
 

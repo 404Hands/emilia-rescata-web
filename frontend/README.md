@@ -12,6 +12,32 @@ ng serve
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
+## Conexión con el backend
+
+El frontend consume la API de FastAPI del refugio. Por defecto apunta a `http://localhost:8000`.
+
+1. Desde el directorio `backend/`, inicia la API:
+
+   ```bash
+   uv sync
+   uv run backend
+   ```
+
+2. Desde `frontend/`, inicia la aplicación:
+
+   ```bash
+   npm start
+   ```
+
+3. La URL base de la API se define en:
+
+   - `src/environments/environment.development.ts` para desarrollo.
+   - `src/environments/environment.ts` para producción.
+
+El backend permite peticiones desde `http://localhost:4200`. Si cambias el puerto o el dominio del frontend, actualiza también el CORS en `backend/src/backend/main.py`.
+
+Los servicios de `src/app/services` consumen los endpoints de mascotas, recursos, donaciones, contactos, solicitudes e inicio de sesión. Los errores del backend se muestran directamente en cada formulario.
+
 ## Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:

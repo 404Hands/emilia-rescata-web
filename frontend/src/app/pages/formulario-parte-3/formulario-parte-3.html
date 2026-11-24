@@ -64,9 +64,15 @@
                             }
                         }
 
+                        @if(mensaje()){
+                            <div class="alert alert-danger small mt-3 mb-0" role="alert">{{ mensaje() }}</div>
+                        }
+
                         <div class="d-grid gap-2 caja-botones">
                             <button type="button" class="btn boton-formulario" (click)="anterior()">ANTERIOR</button>
-                            <button type="submit" class="btn boton-formulario">GUARDAR</button>
+                            <button type="submit" class="btn boton-formulario" [disabled]="enviando()">
+                                {{ enviando() ? 'GUARDANDO...' : 'GUARDAR' }}
+                            </button>
                         </div>
 
                     </div>

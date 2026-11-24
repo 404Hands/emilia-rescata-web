@@ -1,66 +1,68 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Donacion } from '../../interfaces/donacion';
+
+import { DonacionNueva, MetodoPago } from '../../interfaces/donacion';
 import { DonacionService } from '../../services/donacion';
+import { mensajeDeError } from '../../services/http-error';
 
 @Component({
   selector: 'app-datos-donacion',
   imports: [RouterLink],
   templateUrl: './datos-donacion.html',
-  styleUrl: './datos-donacion.css'
+  styleUrl: './datos-donacion.css',
 })
 export class DatosDonacion {
-  modelo: ReturnType<DonacionService['mostrarDonaciones']>;
+  private readonly donacionService = inject(DonacionService);
 
-  nombre = signal('');
-  apellidos = signal('');
-  correo = signal('');
-  telefono = signal('');
-  direccion = signal('');
-  ciudad = signal('');
-  provincia = signal('');
-  codigoPostal = signal('');
+  readonly nombre = signal('');
+  readonly apellidos = signal('');
+  readonly correo = signal('');
+  readonly telefono = signal('');
+  readonly direccion = signal('');
+  readonly ciudad = signal('');
+  readonly provincia = signal('');
+  readonly codigoPostal = signal('');
 
-  numeroTarjeta = signal('');
-  titularTarjeta = signal('');
-  fechaVencimiento = signal('');
-  cvv = signal('');
-  correoPayPal = signal('');
+  readonly numeroTarjeta = signal('');
+  readonly titularTarjeta = signal('');
+  readonly fechaVencimiento = signal('');
+  readonly cvv = signal('');
+  readonly correoPayPal = signal('');
 
-  metodoSeleccionado = signal<Donacion['metodoPago']>('');
+  readonly metodoSeleccionado = signal<MetodoPago | ''>('');
+  readonly erroresTarjeta = signal({
+    numero: '',
+    titular: '',
+    fecha: '',
+    cvv: '',
+  });
 
-  erroresTarjeta = signal({ numero: '', titular: '', fecha: '', cvv: '' });
+  readonly donacionExitosa = signal(false);
+  readonly enviando = signal(false);
 
-  donacionExitosa = signal(false);
+  readonly mensaje = signal('');
+  readonly tipoMensaje = signal<'error' | 'info'>('error');
 
-  mensaje = signal('');
-  tipoMensaje = signal<'error' | 'info'>('error');
-
-  metodos: Donacion['metodoPago'][] = [
+  readonly metodos: MetodoPago[] = [
     'BCP',
     'Banco de la Nación',
     'BBVA',
-    'PayPal'
+    'PayPal',
   ];
 
-  constructor(private donacionService: DonacionService) {
-    this.modelo = this.donacionService.mostrarDonaciones();
+  constructor() {
+    const metodo = this.donacionService.donacionEnCurso().metodoPago;
 
-    const donaciones = this.modelo();
-    if (donaciones.length > 0) {
-      this.metodoSeleccionado.set(donaciones[donaciones.length - 1].metodoPago);
+    if (metodo) {
+      this.metodoSeleccionado.set(metodo);
     }
   }
 
   monto(): number {
-    const donaciones = this.modelo();
-
-    return donaciones.length > 0
-      ? donaciones[donaciones.length - 1].monto
-      : 0;
+    return this.donacionService.donacionEnCurso().monto;
   }
 
-  metodoPago(): Donacion['metodoPago'] {
+  metodoPago(): MetodoPago | '' {
     return this.metodoSeleccionado();
   }
 
@@ -122,19 +124,16 @@ export class DatosDonacion {
         break;
     }
 
-    this.erroresTarjeta.update(e => ({ ...e, [campo]: '' }));
+    this.erroresTarjeta.update(errores => ({ ...errores, [campo]: '' }));
     this.mensaje.set('');
   }
 
   actualizarCorreoPayPal(event: Event): void {
-    this.correoPayPal.set(
-      (event.target as HTMLInputElement).value
-    );
-
+    this.correoPayPal.set((event.target as HTMLInputElement).value);
     this.mensaje.set('');
   }
 
-  seleccionarMetodo(metodo: Donacion['metodoPago']): void {
+  seleccionarMetodo(metodo: MetodoPago): void {
     this.metodoSeleccionado.set(metodo);
     this.donacionService.actualizarMetodoPago(metodo);
 
@@ -149,6 +148,17 @@ export class DatosDonacion {
   }
 
   confirmarDonacion(): void {
+    if (this.enviando()) {
+      return;
+    }
+
+    if (this.monto() < 1) {
+      this.mostrarError(
+        'Selecciona un monto válido antes de completar la donación.'
+      );
+      return;
+    }
+
     if (
       !this.nombre().trim() ||
       !this.apellidos().trim() ||
@@ -169,12 +179,14 @@ export class DatosDonacion {
       return;
     }
 
-    if (!this.metodoPago()) {
+    const metodoPago = this.metodoPago();
+
+    if (!metodoPago) {
       this.mostrarError('Selecciona un método de pago.');
       return;
     }
 
-    if (this.metodoPago() === 'PayPal') {
+    if (metodoPago === 'PayPal') {
       if (
         !this.correoPayPal().trim() ||
         !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.correoPayPal())
@@ -182,15 +194,37 @@ export class DatosDonacion {
         this.mostrarError('Ingresa un correo válido de PayPal.');
         return;
       }
-    } else {
-      if (!this.validarTarjeta()) {
-        this.mostrarError('Revisa los datos de la tarjeta marcados en rojo.');
-        return;
-      }
+    } else if (!this.validarTarjeta()) {
+      this.mostrarError('Revisa los datos de la tarjeta marcados en rojo.');
+      return;
     }
 
+    const donacion: DonacionNueva = {
+      monto: this.monto(),
+      metodoPago,
+      nombre: this.nombre().trim(),
+      apellidos: this.apellidos().trim(),
+      correo: this.correo().trim(),
+      telefono: this.telefono().trim(),
+      direccion: this.direccion().trim(),
+      ciudad: this.ciudad().trim(),
+      provincia: this.provincia().trim(),
+      codigoPostal: this.codigoPostal().trim(),
+    };
+
     this.mensaje.set('');
-    this.donacionExitosa.set(true);
+    this.enviando.set(true);
+
+    this.donacionService.guardarDonacion(donacion).subscribe({
+      next: () => {
+        this.enviando.set(false);
+        this.donacionExitosa.set(true);
+      },
+      error: error => {
+        this.enviando.set(false);
+        this.mostrarError(mensajeDeError(error));
+      },
+    });
   }
 
   private validarTarjeta(): boolean {
@@ -222,7 +256,7 @@ export class DatosDonacion {
     }
 
     this.erroresTarjeta.set(errores);
-    return !Object.values(errores).some(e => e);
+    return !Object.values(errores).some(error => error);
   }
 
   private mostrarError(mensaje: string): void {

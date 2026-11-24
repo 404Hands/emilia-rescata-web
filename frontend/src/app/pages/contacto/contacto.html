@@ -74,6 +74,12 @@
                                 }
                             </div>
 
+                            @if(mensajeError()){
+                                <div class="col-12 mb-3">
+                                    <div class="alert alert-danger mb-0" role="alert">{{ mensajeError() }}</div>
+                                </div>
+                            }
+
                             @if(mensajeEnviado()){
                                 <div class="col-12 mb-3">
                                     <div class="alert alert-success mb-0">¡Mensaje enviado! Te responderemos pronto.</div>
@@ -81,7 +87,9 @@
                             }
 
                             <div class="col-12">
-                                <button type="submit" class="btn boton-enviar w-100">Enviar</button>
+                                <button type="submit" class="btn boton-enviar w-100" [disabled]="enviando()">
+                                    {{ enviando() ? 'Enviando...' : 'Enviar' }}
+                                </button>
                             </div>
 
                         </div>

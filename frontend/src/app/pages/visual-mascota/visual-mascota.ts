@@ -1,24 +1,20 @@
 import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { form, FormField, min, required } from '@angular/forms/signals';
-import type { Mascota } from '../../interfaces/mascota';
-import { Mascota as MascotaService } from '../../services/mascota';
+
+import type {
+  MascotaCreacion,
+  MascotaFormulario,
+} from '../../interfaces/mascota';
+import { MascotaService } from '../../services/mascota';
+import { mensajeDeError } from '../../services/http-error';
 
 interface FotoSeleccionada {
   archivo: File;
   vistaPrevia: string;
 }
 
-@Component({
-  selector: 'app-visual-mascota',
-  standalone: true,
-  imports: [FormField],
-  templateUrl: './visual-mascota.html',
-  styleUrl: './visual-mascota.css'
-})
-export class VisualMascota implements OnDestroy {
-  private readonly mascotaService = inject(MascotaService);
-
-  readonly mascota = signal<Mascota>({
+function mascotaVacia(): MascotaFormulario {
+  return {
     nombre: '',
     raza: '',
     edad: null,
@@ -36,38 +32,51 @@ export class VisualMascota implements OnDestroy {
       protector: false,
       obediente: false,
       tranquilo: false,
-      inteligente: false
-    }
-  });
+      inteligente: false,
+    },
+  };
+}
 
-  readonly ficha = form(this.mascota, (campos) => {
+@Component({
+  selector: 'app-visual-mascota',
+  standalone: true,
+  imports: [FormField],
+  templateUrl: './visual-mascota.html',
+  styleUrl: './visual-mascota.css',
+})
+export class VisualMascota implements OnDestroy {
+  private readonly mascotaService = inject(MascotaService);
+
+  readonly mascota = signal<MascotaFormulario>(mascotaVacia());
+
+  readonly ficha = form(this.mascota, campos => {
     required(campos.nombre, {
-      message: 'Escribe el nombre de la mascota.'
+      message: 'Escribe el nombre de la mascota.',
     });
 
     required(campos.raza, {
-      message: 'Escribe la raza de la mascota.'
+      message: 'Escribe la raza de la mascota.',
     });
 
     required(campos.edad, {
-      message: 'Ingresa la edad de la mascota.'
+      message: 'Ingresa la edad de la mascota.',
     });
 
     min(campos.edad, 0, {
-      message: 'La edad debe ser cero o mayor.'
+      message: 'La edad debe ser cero o mayor.',
     });
   });
 
   readonly mensaje = signal('');
+  readonly enviando = signal(false);
   readonly fotoReferencia = 'assets/perrito-referencia.png';
   readonly posicionesExtra = [1, 2, 3] as const;
-
 
   readonly fotos = signal<(FotoSeleccionada | null)[]>([
     null,
     null,
     null,
-    null
+    null,
   ]);
 
   seleccionarFoto(evento: Event, posicion: number): void {
@@ -89,7 +98,7 @@ export class VisualMascota implements OnDestroy {
 
     fotosActualizadas[posicion] = {
       archivo,
-      vistaPrevia: URL.createObjectURL(archivo)
+      vistaPrevia: URL.createObjectURL(archivo),
     };
 
     this.fotos.set(fotosActualizadas);
@@ -103,11 +112,15 @@ export class VisualMascota implements OnDestroy {
   prepararPublicacion(evento: Event): void {
     evento.preventDefault();
 
+    if (this.enviando()) {
+      return;
+    }
+
     if (this.ficha().invalid()) {
       const campos = [
         this.ficha.nombre(),
         this.ficha.raza(),
-        this.ficha.edad()
+        this.ficha.edad(),
       ];
 
       const campoInvalido = campos.find(campo => campo.invalid());
@@ -124,13 +137,42 @@ export class VisualMascota implements OnDestroy {
       return;
     }
 
-    const archivos = fotosSeleccionadas.map(foto => foto?.archivo ?? null);
+    const archivos = fotosSeleccionadas.map(
+      foto => foto?.archivo ?? null
+    );
 
-    this.mascotaService.agregar(this.mascota(), archivos);
-    this.mensaje.set('Mascota agregada a la lista.');
+    const { edad, ...resto } = this.mascota();
+    const ficha: MascotaCreacion = { ...resto, edad: edad ?? 0 };
+
+    this.enviando.set(true);
+    this.mensaje.set('');
+
+    this.mascotaService.crear(ficha, archivos).subscribe({
+      next: () => {
+        this.enviando.set(false);
+        this.mensaje.set(
+          `La mascota "${ficha.nombre}" se publicó correctamente.`
+        );
+        this.limpiarFormulario();
+      },
+      error: error => {
+        this.enviando.set(false);
+        this.mensaje.set(mensajeDeError(error));
+      },
+    });
   }
 
   ngOnDestroy(): void {
+    this.revocarFotos();
+  }
+
+  private limpiarFormulario(): void {
+    this.revocarFotos();
+    this.fotos.set([null, null, null, null]);
+    this.mascota.set(mascotaVacia());
+  }
+
+  private revocarFotos(): void {
     for (const foto of this.fotos()) {
       if (foto) {
         URL.revokeObjectURL(foto.vistaPrevia);

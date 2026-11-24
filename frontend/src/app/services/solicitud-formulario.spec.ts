@@ -1,12 +1,16 @@
 import { TestBed } from '@angular/core/testing';
-import { SolicitudFormulario } from './solicitud-formulario';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { SolicitudFormularioService } from './solicitud-formulario';
 
-describe('SolicitudFormulario', () => {
-  let service: SolicitudFormulario;
+describe('SolicitudFormularioService', () => {
+  let service: SolicitudFormularioService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(SolicitudFormulario);
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    });
+    service = TestBed.inject(SolicitudFormularioService);
   });
 
   it('should be created', () => {

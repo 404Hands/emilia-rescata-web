@@ -1,5 +1,13 @@
-import { Service, signal } from '@angular/core';
+import { inject, Service, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+
+import { environment } from '../../environments/environment';
 import { SolicitudFormulario } from '../interfaces/solicitud-formulario';
+
+export interface SolicitudRegistrada extends SolicitudFormulario {
+  id: number;
+}
 
 const solicitudVacia: SolicitudFormulario = {
   nombre: '',
@@ -16,15 +24,22 @@ const solicitudVacia: SolicitudFormulario = {
 
 @Service()
 export class SolicitudFormularioService {
+  private readonly http = inject(HttpClient);
+  private readonly url = `${environment.apiUrl}/api/solicitudes`;
 
-  datos = signal<SolicitudFormulario>({ ...solicitudVacia });
+  readonly datos = signal<SolicitudFormulario>({ ...solicitudVacia });
 
-  guardarPaso(datos: SolicitudFormulario) {
+  guardarPaso(datos: SolicitudFormulario): void {
     this.datos.set({ ...datos });
   }
 
-  reiniciar() {
+  reiniciar(): void {
     this.datos.set({ ...solicitudVacia });
   }
 
+  enviar(): Observable<SolicitudRegistrada> {
+    return this.http
+      .post<SolicitudRegistrada>(`${this.url}/`, this.datos())
+      .pipe(tap(() => this.reiniciar()));
+  }
 }

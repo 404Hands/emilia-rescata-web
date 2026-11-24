@@ -1,30 +1,43 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { form, FormField } from '@angular/forms/signals';
-import { Inventario } from '../../services/inventario';
+
+import {
+  Inventario,
+  ProductoId,
+  UnidadIngreso,
+} from '../../services/inventario';
+import { mensajeDeError } from '../../services/http-error';
 
 @Component({
   selector: 'app-comida-recursos',
   standalone: true,
   imports: [FormField, DecimalPipe],
   templateUrl: './comida-recursos.html',
-  styleUrl: './comida-recursos.css'
+  styleUrl: './comida-recursos.css',
 })
-export class ComidaRecursos {
+export class ComidaRecursos implements OnInit {
   readonly inventario = inject(Inventario);
   readonly soloFaltantes = signal(false);
   readonly mensaje = signal('');
+  readonly ocupado = signal(false);
 
-  readonly ingreso = signal({
+  readonly ingreso = signal<{
+    productoId: ProductoId;
+    cantidad: number | null;
+    unidad: UnidadIngreso;
+  }>({
     productoId: 'adultos',
-    cantidad: null as number | null,
-    unidad: 'envase'
+    cantidad: null,
+    unidad: 'envase',
   });
 
   readonly formulario = form(this.ingreso);
 
   readonly productoElegido = computed(() =>
-    this.inventario.productos().find(p => p.id === this.ingreso().productoId)
+    this.inventario
+      .productos()
+      .find(producto => producto.id === this.ingreso().productoId)
   );
 
   readonly productosVisibles = computed(() =>
@@ -33,11 +46,19 @@ export class ComidaRecursos {
       : this.inventario.productos()
   );
 
+  ngOnInit(): void {
+    this.inventario.cargar().subscribe({
+      error: error => {
+        this.mensaje.set(mensajeDeError(error));
+      },
+    });
+  }
+
   cambiarProducto(id: string): void {
     this.ingreso.update(datos => ({
       ...datos,
-      productoId: id,
-      unidad: 'envase'
+      productoId: id as ProductoId,
+      unidad: 'envase',
     }));
     this.mensaje.set('');
   }
@@ -56,6 +77,10 @@ export class ComidaRecursos {
   guardarIngreso(evento: Event): void {
     evento.preventDefault();
 
+    if (this.ocupado()) {
+      return;
+    }
+
     const producto = this.productoElegido();
     const { cantidad, unidad } = this.ingreso();
 
@@ -69,23 +94,78 @@ export class ComidaRecursos {
       return;
     }
 
-    let unidades = cantidad;
-
-    if (unidad === 'kg') {
-      if (!producto.kgPorUnidad) {
-        this.mensaje.set(`Este producto se registra en ${producto.plural}.`);
-        return;
-      }
-      unidades = cantidad / producto.kgPorUnidad;
+    if (unidad === 'kg' && !producto.kgPorUnidad) {
+      this.mensaje.set(`Este producto se registra en ${producto.plural}.`);
+      return;
     }
 
-    this.inventario.ajustar(producto.id, unidades);
+    this.ocupado.set(true);
+    this.mensaje.set('');
 
-    const medida = unidad === 'kg'
-      ? 'kg'
-      : cantidad === 1 ? producto.unidad : producto.plural;
+    this.inventario.registrarIngreso(producto.id, cantidad, unidad).subscribe({
+      next: () => {
+        this.ocupado.set(false);
 
-    this.mensaje.set(`Ingreso registrado: ${cantidad} ${medida} de ${producto.nombre}.`);
-    this.ingreso.update(datos => ({ ...datos, cantidad: null }));
+        const medida =
+          unidad === 'kg'
+            ? 'kg'
+            : cantidad === 1
+              ? producto.unidad
+              : producto.plural;
+
+        this.mensaje.set(
+          `Ingreso registrado: ${cantidad} ${medida} de ${producto.nombre}.`
+        );
+        this.ingreso.update(datos => ({ ...datos, cantidad: null }));
+      },
+      error: error => {
+        this.ocupado.set(false);
+        this.mensaje.set(mensajeDeError(error));
+      },
+    });
+  }
+
+  usarUno(id: ProductoId): void {
+    if (this.ocupado()) {
+      return;
+    }
+
+    this.ocupado.set(true);
+    this.mensaje.set('');
+
+    this.inventario.usarUno(id).subscribe({
+      next: producto => {
+        this.ocupado.set(false);
+        this.mensaje.set(
+          `Se usó 1 ${producto.unidad} de ${producto.nombre}.`
+        );
+      },
+      error: error => {
+        this.ocupado.set(false);
+        this.mensaje.set(mensajeDeError(error));
+      },
+    });
+  }
+
+  agregarUnaUnidad(id: ProductoId): void {
+    if (this.ocupado()) {
+      return;
+    }
+
+    this.ocupado.set(true);
+    this.mensaje.set('');
+
+    this.inventario.registrarIngreso(id, 1, 'envase').subscribe({
+      next: producto => {
+        this.ocupado.set(false);
+        this.mensaje.set(
+          `Se agregó 1 ${producto.unidad} de ${producto.nombre}.`
+        );
+      },
+      error: error => {
+        this.ocupado.set(false);
+        this.mensaje.set(mensajeDeError(error));
+      },
+    });
   }
 }

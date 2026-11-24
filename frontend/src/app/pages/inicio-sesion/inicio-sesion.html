@@ -74,8 +74,15 @@
               <a href="#" class="olvidaste">¿Olvidaste tu contraseña?</a>
             </div>
 
-            <button type="submit" class="btn boton-login w-100">
-              Iniciar Sesión <img src="/assets/INICIO_SESION_HUELLITA.png" alt="Patita" class="icono-patita" />
+            @if (errorServidor()) {
+              <div class="alert alert-danger small mb-3" role="alert">
+                {{ errorServidor() }}
+              </div>
+            }
+
+            <button type="submit" class="btn boton-login w-100" [disabled]="enviando()">
+              {{ enviando() ? 'Ingresando...' : 'Iniciar Sesión' }}
+              <img src="/assets/INICIO_SESION_HUELLITA.png" alt="Patita" class="icono-patita" />
             </button>
 
             <button

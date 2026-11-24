@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { HeaderAdmin } from './header-admin';
 
 describe('HeaderAdmin', () => {
@@ -8,6 +9,7 @@ describe('HeaderAdmin', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HeaderAdmin],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HeaderAdmin);

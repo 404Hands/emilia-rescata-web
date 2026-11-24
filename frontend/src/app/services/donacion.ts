@@ -1,36 +1,85 @@
-import { Injectable, signal } from '@angular/core';
-import { Donacion } from '../interfaces/donacion';
+import { computed, inject, Service, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+import { environment } from '../../environments/environment';
+import {
+  Donacion,
+  DonacionNueva,
+  EstadoDonacion,
+  MetodoPago,
+} from '../interfaces/donacion';
+
+export interface BorradorDonacion {
+  monto: number;
+  metodoPago: MetodoPago | '';
+}
+
+@Service()
 export class DonacionService {
+  private readonly http = inject(HttpClient);
+  private readonly url = `${environment.apiUrl}/api/donaciones`;
 
-  private donaciones = signal<Donacion[]>([]);
+  private readonly donaciones = signal<Donacion[]>([]);
+  readonly lista = this.donaciones.asReadonly();
 
-  guardarDonacion(donacion: Donacion) {
-    this.donaciones.update(lista => [...lista, donacion]);
+  private readonly borrador = signal<BorradorDonacion>({
+    monto: 0,
+    metodoPago: '',
+  });
+  readonly donacionEnCurso = this.borrador.asReadonly();
+  readonly monto = computed(() => this.borrador().monto);
+
+  establecerMonto(monto: number): void {
+    this.borrador.update(datos => ({ ...datos, monto }));
   }
 
-  mostrarDonaciones() {
-    return this.donaciones;
+  actualizarMetodoPago(metodo: MetodoPago): void {
+    this.borrador.update(datos => ({ ...datos, metodoPago: metodo }));
   }
 
-  actualizarMetodoPago(metodo: Donacion['metodoPago']) {
-    this.donaciones.update(lista => {
-      if (lista.length === 0) {
-        return lista;
-      }
+  reiniciarBorrador(): void {
+    this.borrador.set({ monto: 0, metodoPago: '' });
+  }
 
-      const actualizadas = [...lista];
-      const ultima = actualizadas.length - 1;
+  mostrarDonaciones(): Observable<Donacion[]> {
+    return this.http.get<Donacion[]>(`${this.url}/`).pipe(
+      tap(donaciones => {
+        this.donaciones.set(donaciones);
+      })
+    );
+  }
 
-      actualizadas[ultima] = {
-        ...actualizadas[ultima],
-        metodoPago: metodo
-      };
+  guardarDonacion(donacion: DonacionNueva): Observable<Donacion> {
+    return this.http.post<Donacion>(`${this.url}/`, donacion).pipe(
+      tap(guardada => {
+        this.donaciones.update(lista => [...lista, guardada]);
+      })
+    );
+  }
 
-      return actualizadas;
-    });
+  actualizarDonacion(
+    id: number,
+    estado: EstadoDonacion
+  ): Observable<Donacion> {
+    return this.http.put<Donacion>(`${this.url}/${id}`, { estado }).pipe(
+      tap(actualizada => {
+        this.donaciones.update(lista =>
+          lista.map(donacion =>
+            donacion.id === id ? actualizada : donacion
+          )
+        );
+      })
+    );
+  }
+
+  eliminarDonacion(id: number): Observable<unknown> {
+    return this.http.delete(`${this.url}/${id}`).pipe(
+      tap(() => {
+        this.donaciones.update(lista =>
+          lista.filter(donacion => donacion.id !== id)
+        );
+      })
+    );
   }
 }

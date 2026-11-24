@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { LayoutInicioSesion } from './layout-inicio-sesion';
 
 describe('LayoutInicioSesion', () => {
@@ -8,6 +9,7 @@ describe('LayoutInicioSesion', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LayoutInicioSesion],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LayoutInicioSesion);

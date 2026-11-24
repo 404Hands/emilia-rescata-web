@@ -1,61 +1,59 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Donacion } from '../../interfaces/donacion';
+
 import { DonacionService } from '../../services/donacion';
 
 @Component({
   selector: 'app-proceso-donacion',
   imports: [RouterLink],
   templateUrl: './proceso-donacion.html',
-  styleUrl: './proceso-donacion.css'
+  styleUrl: './proceso-donacion.css',
 })
 export class ProcesoDonacion {
+  private readonly donacionService = inject(DonacionService);
 
-  constructor(private donacionService: DonacionService) {}
+  readonly borrador = this.donacionService.donacionEnCurso;
+  readonly montos = [10, 20, 30, 50, 100, 150];
+  readonly mensaje = signal('');
+  readonly otroMonto = signal(
+    this.borrador().monto > 0 && !this.montos.includes(this.borrador().monto)
+  );
 
-  modelo = signal<Donacion>({
-    monto: 0,
-    metodoPago: '',
-    fecha: new Date(),
-    estado: 'Pendiente'
-  });
+  monto(): number {
+    return this.borrador().monto;
+  }
 
-  otroMonto = signal(false);
-  mensaje = signal('');
-
-  montos = [10, 20, 30, 50, 100, 150];
-
-  seleccionarMonto(monto: number) {
-    this.modelo.update(d => ({ ...d, monto }));
+  seleccionarMonto(monto: number): void {
+    this.donacionService.establecerMonto(monto);
     this.otroMonto.set(false);
     this.mensaje.set('');
   }
 
-  seleccionarOtro() {
-    this.modelo.update(d => ({ ...d, monto: 0 }));
+  seleccionarOtro(): void {
+    this.donacionService.establecerMonto(0);
     this.otroMonto.set(true);
     this.mensaje.set('');
   }
 
-  actualizarMonto(event: Event) {
-    const valor = Number((event.target as HTMLInputElement).value);
+  actualizarMonto(evento: Event): void {
+    const valor = Number((evento.target as HTMLInputElement).value);
 
-    this.modelo.update(d => ({ ...d, monto: valor }));
+    this.donacionService.establecerMonto(valor);
     this.mensaje.set('');
   }
 
   montoValido(): boolean {
-    return this.modelo().monto >= 1 &&
-      Number.isFinite(this.modelo().monto);
+    return this.monto() >= 1 && Number.isFinite(this.monto());
   }
 
-  guardarMonto() {
+  guardarMonto(): void {
     if (!this.montoValido()) {
-      this.mensaje.set('Por favor, selecciona o ingresa un monto válido para continuar.');
+      this.mensaje.set(
+        'Por favor, selecciona o ingresa un monto válido para continuar.'
+      );
       return;
     }
 
-    this.donacionService.guardarDonacion(this.modelo());
     this.mensaje.set('');
   }
 }

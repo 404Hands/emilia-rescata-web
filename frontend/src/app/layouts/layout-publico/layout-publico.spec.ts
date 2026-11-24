@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { LayoutPublico } from './layout-publico';
 
 describe('LayoutPublico', () => {
@@ -8,6 +9,7 @@ describe('LayoutPublico', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LayoutPublico],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LayoutPublico);

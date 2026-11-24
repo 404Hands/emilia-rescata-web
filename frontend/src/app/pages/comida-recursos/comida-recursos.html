@@ -117,21 +117,27 @@
                         </div>
 
                         <div class="acciones">
-                            <button type="button" class="btn boton-claro" [disabled]="producto.cantidad < 1"
+                            <button type="button" class="btn boton-claro" [disabled]="producto.cantidad < 1 || ocupado()"
                                 [attr.aria-label]="'Usar 1 ' + producto.unidad + ' de ' + producto.nombre"
-                                (click)="inventario.ajustar(producto.id, -1)">
+                                (click)="usarUno(producto.id)">
                                 <i class="bi bi-dash-lg"></i> Usar 1
                             </button>
 
-                            <button type="button" class="btn boton-agregar"
+                            <button type="button" class="btn boton-agregar" [disabled]="ocupado()"
                                 [attr.aria-label]="'Agregar 1 ' + producto.unidad + ' de ' + producto.nombre"
-                                (click)="inventario.ajustar(producto.id, 1)">
+                                (click)="agregarUnaUnidad(producto.id)">
                                 <i class="bi bi-plus-lg"></i> Agregar {{ producto.unidad }}
                             </button>
                         </div>
                     </li>
                     } @empty {
-                    <li class="panel p-3">Ya repusiste todos los productos que estaban bajos.</li>
+                    <li class="panel p-3">
+                        @if (inventario.cargando()) {
+                        Cargando inventario...
+                        } @else {
+                        No hay productos para mostrar.
+                        }
+                    </li>
                     }
                 </ul>
             </section>
@@ -171,7 +177,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn boton-coral w-100 mt-3">
+                    <button type="submit" class="btn boton-coral w-100 mt-3" [disabled]="ocupado()">
                         <i class="bi bi-check-circle"></i> Guardar ingreso
                     </button>
                     <p class="mensaje mb-0" role="status">{{ mensaje() }}</p>
