@@ -127,7 +127,7 @@ def actualizar_mascota(
     cambios: dict[int, FotoMascota | None] = {}
     archivos = (foto_principal, foto_extra_1, foto_extra_2, foto_extra_3)
 
-    # La posición 0 es la foto principal y siempre debe conservar una imagen.
+
     quitar = (False, quitar_extra_1, quitar_extra_2, quitar_extra_3)
 
     for posicion, archivo in enumerate(archivos):
