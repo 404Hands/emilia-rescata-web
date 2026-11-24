@@ -19,10 +19,7 @@ import { FormularioParte1 } from './pages/formulario-parte-1/formulario-parte-1'
 import { FormularioParte2 } from './pages/formulario-parte-2/formulario-parte-2';
 import { FormularioParte3 } from './pages/formulario-parte-3/formulario-parte-3';
 import { FormularioParte4 } from './pages/formulario-parte-4/formulario-parte-4';
-import { Inicio } from './pages/inicio/inicio';
-import { SobreNosotros } from './pages/sobre-nosotros/sobre-nosotros';
-import { Adopciones } from './pages/adopciones/adopciones';
-import { Donaciones } from './pages/donaciones/donaciones';
+
 import { VisualMascota } from './pages/visual-mascota/visual-mascota';
 import { LayoutAdministrar } from './layouts/layout-administrar/layout-administrar';
 import { ComidaRecursos } from './pages/comida-recursos/comida-recursos';
