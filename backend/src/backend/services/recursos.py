@@ -1,8 +1,7 @@
-from uuid import UUID, uuid4
 from math import isfinite
 
 from backend.repositories.recursos import RecursoRepository, recurso_repository
-from backend.schemas.recursos import Ingreso, Producto, ProductoConIngreso, ProductoId, UnidadIngreso
+from backend.schemas.recursos import Ingreso, IngresoDatos, Producto, ProductoConIngreso, ProductoId, UnidadIngreso
 
 
 class IngresoInvalidoError(ValueError):
@@ -45,18 +44,18 @@ class RecursoService:
 
     def registrar_ingreso(self, producto_id: ProductoId, cantidad: float, unidad: UnidadIngreso) -> ProductoConIngreso:
         self._validar_ingreso(producto_id, cantidad, unidad)
-        ingreso = Ingreso(ingreso_id=uuid4(), productoId=producto_id, cantidad=cantidad, unidad=unidad)
+        ingreso = IngresoDatos(productoId=producto_id, cantidad=cantidad, unidad=unidad)
         return self._repository.crear_ingreso(ingreso)
 
     def listar_ingresos(self) -> list[Ingreso]:
         return self._repository.listar_ingresos()
 
-    def editar_ingreso(self, ingreso_id: UUID, producto_id: ProductoId, cantidad: float, unidad: UnidadIngreso) -> Ingreso:
+    def editar_ingreso(self, ingreso_id: int, producto_id: ProductoId, cantidad: float, unidad: UnidadIngreso) -> Ingreso:
         self._validar_ingreso(producto_id, cantidad, unidad)
         ingreso = Ingreso(ingreso_id=ingreso_id, productoId=producto_id, cantidad=cantidad, unidad=unidad)
         return self._repository.editar_ingreso(ingreso)
 
-    def eliminar_ingreso(self, ingreso_id: UUID) -> None:
+    def eliminar_ingreso(self, ingreso_id: int) -> None:
         self._repository.eliminar_ingreso(ingreso_id)
 
     def usar_uno(self, producto_id: ProductoId) -> Producto:
