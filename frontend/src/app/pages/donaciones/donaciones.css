@@ -58,11 +58,11 @@ main h2 {
     --bs-btn-color: var(--color-blanco);
     --bs-btn-border-color: var(--color-principal);
 
-    --bs-btn-hover-bg: var(--color-oscuro);
+    --bs-btn-hover-bg: var(--color-principal);
     --bs-btn-hover-color: var(--color-blanco);
-    --bs-btn-hover-border-color: var(--color-oscuro);
+    --bs-btn-hover-border-color: var(--color-principal);
 
-    --bs-btn-active-bg: var(--color-oscuro);
+    --bs-btn-active-bg: var(--color-principal);
     --bs-btn-active-color: var(--color-blanco);
 
     animation: pulsoDonar 2.2s infinite ease-in-out;

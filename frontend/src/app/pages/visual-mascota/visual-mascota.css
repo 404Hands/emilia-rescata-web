@@ -1,0 +1,340 @@
+:host {
+  display: block;
+}
+
+.ficha-adopcion {
+  --rosa: #ffb4b1;
+  --rosa-suave: #ffdad6;
+  --lavanda: #f4f1ff;
+  --borde: #f59b9f;
+  --texto: #251f25;
+  --foco: #8b354d;
+  --fondo-degradado: #ffe7e5; /* NUEVO */
+
+  position: relative; /* NUEVO */
+  overflow: hidden; /* NUEVO */
+  padding: clamp(16px, 4vw, 52px);
+  background: linear-gradient(to bottom, #fff, var(--fondo-degradado)); /* NUEVO */
+  color: var(--texto);
+}
+
+/* NUEVO: círculos decorativos del fondo */
+.ficha-adopcion::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  left: -120px;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  background-color: var(--rosa);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.ficha-adopcion::after {
+  content: "";
+  position: absolute;
+  bottom: -150px;
+  right: -150px;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background-color: var(--rosa);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.ficha-contenedor {
+  position: relative; /* NUEVO: el contenido va encima de los círculos */
+  z-index: 1; /* NUEVO */
+  max-width: 1040px;
+}
+
+.ficha-mascota {
+  padding: clamp(20px, 3.5vw, 46px);
+  background-color: #fff;
+  border: 2px solid var(--borde);
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(139, 53, 77, 0.12); /* NUEVO */
+}
+
+
+.fotos-mascota {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.fotos-mascota > label,
+.fotos-mascota .col label {
+  background-color: var(--lavanda);
+  cursor: pointer;
+  transition: transform 0.3s, border-color 0.3s, background-color 0.3s; /* NUEVO */
+}
+
+.fotos-mascota > label:hover { /* NUEVO */
+  transform: scale(1.02);
+}
+
+.fotos-mascota img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fotos-mascota .col label {
+  border: 1px dashed var(--borde);
+  color: var(--texto);
+}
+
+.fotos-mascota .col label:hover {
+  border-color: var(--foco);
+  background-color: var(--rosa-suave);
+  transform: scale(1.05); /* NUEVO */
+}
+
+.fotos-mascota > input:focus-visible + label,
+.fotos-mascota .col:focus-within label {
+  outline: 3px solid var(--foco);
+  outline-offset: 2px;
+}
+
+
+.historia-mascota {
+  margin-top: 20px;
+}
+
+.historia-mascota textarea {
+  min-height: 9rem;
+  padding: 10px 12px;
+  border: 1px solid #decfd2;
+  border-radius: 10px;
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.ficha-mascota .form-label {
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+#nombre-mascota {
+  padding: 4px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--texto);
+  line-height: 1.15;
+}
+
+#nombre-mascota:hover {
+  border-color: var(--borde);
+}
+
+.ficha-mascota .dato-valor {
+  min-height: 44px;
+  padding: 8px;
+  background-color: var(--rosa);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--texto);
+  text-align: center;
+  font-weight: 600;
+}
+
+.ficha-mascota .form-control:focus {
+  outline: 2px solid var(--foco);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+
+.grupo-ficha {
+  min-width: 0;
+  margin-inline: 0;
+  padding: 0;
+  border: 0;
+}
+
+.grupo-ficha legend {
+  float: none;
+  width: auto;
+  margin-bottom: 10px;
+}
+
+.grupo-ficha .btn {
+  display: flex;
+  min-width: 0;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 5px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background-color: var(--lavanda);
+  color: #50485a;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s, transform 0.3s; /* NUEVO */
+}
+
+.grupo-ficha .btn-check + .btn:hover {
+  border-color: var(--borde);
+  transform: scale(1.04); /* NUEVO */
+}
+
+.grupo-ficha .btn-check:checked + .btn {
+  border-color: var(--borde);
+  background-color: var(--rosa);
+  color: var(--texto);
+  font-weight: 600;
+}
+
+.grupo-ficha .btn-check:focus-visible + .btn {
+  outline: 3px solid var(--foco);
+  outline-offset: 2px;
+}
+
+.opciones-tamano .tarjeta-tamano {
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 72px;
+}
+
+.tarjeta-tamano small,
+.tarjeta-salud small {
+  font-size: 0.78rem;
+}
+
+
+.opciones-salud,
+.rasgos-mascota {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.tarjeta-salud {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 12px 6px;
+  border-radius: 9px;
+  background-color: var(--lavanda);
+  font-size: 0.85rem;
+  line-height: 1.25;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s; /* NUEVO */
+}
+
+.tarjeta-salud:hover { /* NUEVO */
+  background-color: var(--rosa-suave);
+  transform: scale(1.03);
+}
+
+.tarjeta-salud .form-check-input {
+  flex-shrink: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.tarjeta-salud .form-check-input:checked {
+  background-color: var(--foco);
+  border-color: var(--foco);
+}
+
+
+.rasgos-mascota .rasgo {
+  font-size: 0.88rem;
+}
+
+.rasgos-mascota .btn-check:checked + .rasgo {
+  background-color: var(--rosa-suave);
+}
+
+
+.accion-publicar {
+  padding-top: clamp(12px, 4vw, 48px);
+}
+
+.ficha-mascota .boton-publicar {
+  min-height: 44px;
+  padding: 10px 20px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background-color: var(--rosa);
+  color: var(--texto);
+  font-weight: 700;
+  transition: background-color 0.3s, transform 0.3s; /* NUEVO */
+}
+
+.ficha-mascota .boton-publicar:hover {
+  background-color: #ffa39f;
+  transform: scale(1.05); /* NUEVO */
+}
+
+.ficha-mascota .boton-publicar:focus-visible {
+  outline: 3px solid var(--foco);
+  outline-offset: 2px;
+}
+
+.accion-publicar [role="status"] {
+  font-size: 0.9rem;
+}
+
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .tarjeta-salud {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .ficha-adopcion {
+    padding: 16px 12px 28px;
+  }
+
+  .ficha-mascota {
+    padding: 20px 14px 26px;
+  }
+
+  .ficha-mascota .boton-publicar {
+    width: 100%;
+  }
+
+  /* NUEVO: círculos más pequeños en celular */
+  .ficha-adopcion::before {
+    width: 220px;
+    height: 220px;
+    top: -90px;
+    left: -90px;
+  }
+
+  .ficha-adopcion::after {
+    width: 250px;
+    height: 250px;
+    bottom: -100px;
+    right: -100px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .opciones-salud {
+    grid-template-columns: 1fr;
+  }
+
+  .tarjeta-salud {
+    justify-content: flex-start;
+    padding: 10px 14px;
+  }
+
+  .rasgos-mascota {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

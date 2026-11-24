@@ -64,3 +64,16 @@ main h2 {
     height: auto;
     border-radius: 12px;
 }
+
+.boton-quiero-adoptar {
+    background-color: var(--color-principal);
+    color: var(--color-blanco);
+    border: none;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.boton-quiero-adoptar:hover {
+    background-color: var(--color-principal);
+    color: var(--color-blanco);
+    transform: scale(1.05);
+}

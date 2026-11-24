@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
-    selector: 'app-donaciones',
-    imports: [RouterLink],
-    templateUrl: './donaciones.html',
-    styleUrl: './donaciones.css',
+  imports: [RouterLink],
+  selector: 'app-donaciones',
+  styleUrl: './donaciones.css',
+  templateUrl: './donaciones.html',
 })
 export class Donaciones {}

@@ -1,0 +1,65 @@
+<header class="barra-admin">
+    <nav class="barra-contenido container-fluid" aria-label="Navegación de administración">
+
+  
+        <a class="marca" routerLink="/panel-general" aria-label="Ir al panel general">
+            <img src="assets/HEADER_LOGO.png" alt="Emilia Rescata" class="marca-logo">
+        </a>
+
+     
+        <ul class="enlaces list-unstyled mb-0">
+            <li>
+                <a routerLink="/admin/panel-general" routerLinkActive="activo" ariaCurrentWhenActive="page">
+                    Panel General
+                </a>
+            </li>
+            <li>
+                <a routerLink="/admin/mascotas" routerLinkActive="activo" ariaCurrentWhenActive="page">
+                    Adopciones
+                </a>
+            </li>
+            <li>
+                <a routerLink="/admin/comida-recursos" routerLinkActive="activo" ariaCurrentWhenActive="page">
+                    Comida y Recursos
+                </a>
+            </li>
+        </ul>
+
+        <div class="acciones">
+            @if (usuario(); as cuenta) {
+            <div class="cuenta">
+                @if (cuenta.fotoUrl) {
+                <img [src]="cuenta.fotoUrl" alt="" class="cuenta-foto">
+                } @else {
+                <span class="cuenta-inicial" aria-hidden="true">
+                    {{ cuenta.nombre.charAt(0) }}
+                </span>
+                }
+
+                <div class="cuenta-datos">
+                    <strong>{{ cuenta.nombre }}</strong>
+                    <small>{{ cuenta.rol }}</small>
+                </div>
+            </div>
+
+            <button type="button" class="btn boton-salir" (click)="salidaSolicitada.emit()">
+                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+            </button>
+            } @else {
+
+            <div class="cuenta">
+                <img src="assets/ADMIN_FOTO.png" alt="" class="cuenta-foto">
+                <div class="cuenta-datos">
+                    <strong>Emilia</strong>
+                    <small>Administradora</small>
+                </div>
+            </div>
+
+                
+            <a routerLink="/inicio-sesion" class="btn boton-salir">
+                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+            </a>
+            }
+        </div>
+    </nav>
+</header>

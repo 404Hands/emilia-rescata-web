@@ -2,7 +2,7 @@
     <div class="container">
 
         <div class="caja-volver">
-            <a href="#"><i class="bi bi-arrow-left"></i></a>
+            <a routerLink="/mascotas" ><i class="bi bi-arrow-left"></i></a>
         </div>
 
         <div class="caja-titulo">
@@ -13,7 +13,7 @@
         <div class="row justify-content-center">
             <div class="col-12 col-md-10 col-lg-7">
 
-                <form class="tarjeta-formulario">
+                <form class="tarjeta-formulario" novalidate (submit)="siguiente($event)">
 
                     <div class="pasos">
                         <div class="circulo activo">1</div>
@@ -29,20 +29,35 @@
 
                         <div class="mb-3">
                             <label for="nombre" class="form-label fw-bold">Nombre y Apellido completo:</label>
-                            <input type="text" id="nombre" class="form-control" placeholder="Ej: María Pérez López" required>
+                            <input type="text" id="nombre" class="form-control" placeholder="Ej: María Pérez López" [formField]="solicitudFormulario.nombre">
+                            @if(solicitudFormulario.nombre().touched() || intentoEnvio()){
+                                @for(error of solicitudFormulario.nombre().errors(); track error){
+                                    <p class="text-danger small mt-1 mb-0">{{error.message}}</p>
+                                }
+                            }
                         </div>
 
                         <div class="mb-3">
                             <label for="celular" class="form-label fw-bold">Número de Celular</label>
-                            <input type="tel" id="celular" class="form-control" placeholder="Ej: 925 178 310" required>
+                            <input type="tel" id="celular" class="form-control" placeholder="Ej: 925178310" [formField]="solicitudFormulario.celular">
+                            @if(solicitudFormulario.celular().touched() || intentoEnvio()){
+                                @for(error of solicitudFormulario.celular().errors(); track error){
+                                    <p class="text-danger small mt-1 mb-0">{{error.message}}</p>
+                                }
+                            }
                         </div>
 
                         <div class="mb-3">
                             <label for="distrito" class="form-label fw-bold">Distrito o Provincia:</label>
-                            <input type="text" id="distrito" class="form-control" placeholder="Ej: Huancayo" required>
+                            <input type="text" id="distrito" class="form-control" placeholder="Ej: Huancayo" [formField]="solicitudFormulario.distrito">
+                            @if(solicitudFormulario.distrito().touched() || intentoEnvio()){
+                                @for(error of solicitudFormulario.distrito().errors(); track error){
+                                    <p class="text-danger small mt-1 mb-0">{{error.message}}</p>
+                                }
+                            }
                         </div>
 
-                        <button type="submit" class="btn boton-siguiente w-100" routerLink="/formulario-parte-2">SIGUIENTE</button>
+                        <button type="submit" class="btn boton-siguiente w-100">SIGUIENTE</button>
 
                     </div>
 
