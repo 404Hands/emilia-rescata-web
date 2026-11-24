@@ -11,6 +11,9 @@ import { Donaciones } from './pages/donaciones/donaciones';
 import { Contacto } from './pages/contacto/contacto';
 import { Mascotas } from './pages/mascotas/mascotas';
 
+import { ProcesoDonacion } from './pages/proceso-donacion/proceso-donacion';
+import { DatosDonacion } from './pages/datos-donacion/datos-donacion';
+
 import { InicioSesion } from './pages/inicio-sesion/inicio-sesion';
 import { FormularioParte1 } from './pages/formulario-parte-1/formulario-parte-1';
 import { FormularioParte2 } from './pages/formulario-parte-2/formulario-parte-2';
@@ -27,6 +30,8 @@ export const routes: Routes = [
       { path: 'sobre-nosotros', component: SobreNosotros },
       { path: 'adopciones', component: Adopciones },
       { path: 'donaciones', component: Donaciones },
+      { path: 'proceso-donacion', component: ProcesoDonacion },
+      { path: 'datos-donacion', component: DatosDonacion },
       { path: 'contacto', component: Contacto },
       { path: 'mascotas', component: Mascotas }
     ]
