@@ -1,18 +1,18 @@
-from uuid import UUID
 from typing import Annotated
 
-from fastapi import APIRouter, Form, HTTPException, Response, status
+from fastapi import APIRouter, HTTPException, Path, Response, status
 
 from backend.repositories.recursos import (
     IngresoNoEncontradoError,
     SaldoFueraDeRangoError,
     StockInsuficienteError,
 )
-from backend.schemas.recursos import Ingreso, Producto, ProductoConIngreso, ProductoId, UnidadIngreso
+from backend.schemas.recursos import Ingreso, IngresoDatos, Producto, ProductoConIngreso, ProductoId
 from backend.services.recursos import IngresoInvalidoError, recurso_service
 
 
 router = APIRouter(prefix="/recursos", tags=["Comida y Recursos"])
+IngresoId = Annotated[int, Path(gt=0)]
 
 
 @router.get("", response_model=list[Producto], summary="Consultar inventario")
@@ -25,13 +25,9 @@ def listar_recursos(solo_faltantes: bool = False) -> list[Producto]:
     response_model=ProductoConIngreso,
     summary="Registrar llegada de comida o recursos",
 )
-def registrar_ingreso(
-    productoId: Annotated[ProductoId, Form()],
-    cantidad: Annotated[float, Form(gt=0, allow_inf_nan=False)],
-    unidad: Annotated[UnidadIngreso, Form()] = "envase",
-) -> ProductoConIngreso:
+def registrar_ingreso(datos: IngresoDatos) -> ProductoConIngreso:
     try:
-        return recurso_service.registrar_ingreso(productoId, cantidad, unidad)
+        return recurso_service.registrar_ingreso(datos.productoId, datos.cantidad, datos.unidad)
     except (IngresoInvalidoError, SaldoFueraDeRangoError) as exc:
         raise HTTPException(
             status_code=422,
@@ -59,14 +55,9 @@ def listar_ingresos() -> list[Ingreso]:
 
 
 @router.put("/ingresos/{ingreso_id}", response_model=Ingreso, summary="Editar un ingreso")
-def editar_ingreso(
-    ingreso_id: UUID,
-    productoId: Annotated[ProductoId, Form()],
-    cantidad: Annotated[float, Form(gt=0, allow_inf_nan=False)],
-    unidad: Annotated[UnidadIngreso, Form()] = "envase",
-) -> Ingreso:
+def editar_ingreso(ingreso_id: IngresoId, datos: IngresoDatos) -> Ingreso:
     try:
-        return recurso_service.editar_ingreso(ingreso_id, productoId, cantidad, unidad)
+        return recurso_service.editar_ingreso(ingreso_id, datos.productoId, datos.cantidad, datos.unidad)
     except IngresoNoEncontradoError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except StockInsuficienteError as exc:
@@ -76,7 +67,7 @@ def editar_ingreso(
 
 
 @router.delete("/ingresos/{ingreso_id}", status_code=204, summary="Eliminar un ingreso")
-def eliminar_ingreso(ingreso_id: UUID) -> Response:
+def eliminar_ingreso(ingreso_id: IngresoId) -> Response:
     try:
         recurso_service.eliminar_ingreso(ingreso_id)
     except IngresoNoEncontradoError as exc:

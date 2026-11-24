@@ -1,5 +1,4 @@
 from typing import Literal
-from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -43,5 +42,5 @@ class MascotaUpdate(MascotaBase):
 class Mascota(MascotaBase):
     """Ficha registrada con su identificador y las rutas de sus fotos."""
 
-    id: UUID
+    id: int = Field(gt=0)
     fotos: dict[int, str] = Field(default_factory=dict)

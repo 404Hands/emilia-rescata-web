@@ -1,7 +1,6 @@
-from uuid import UUID
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 ProductoId = Literal["adultos", "cachorros", "especial", "latas", "desinfectante"]
@@ -18,12 +17,24 @@ class Producto(BaseModel):
     minimo: int = Field(ge=0)
     detalle: str
 
+class IngresoDatos(BaseModel):
+    model_config = ConfigDict(
+        json_schema_extra={
+            "examples": [{"productoId": "adultos", "cantidad": 20, "unidad": "kg"}]
+        }
+    )
+
+    productoId: ProductoId
+    cantidad: float = Field(gt=0, allow_inf_nan=False)
+    unidad: UnidadIngreso = "envase"
+
+
 class Ingreso(BaseModel):
-    ingreso_id: UUID
+    ingreso_id: int = Field(gt=0)
     productoId: ProductoId
     cantidad: float
     unidad: UnidadIngreso
 
 
 class ProductoConIngreso(Producto):
-    ingreso_id: UUID
+    ingreso_id: int = Field(gt=0)

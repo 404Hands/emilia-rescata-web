@@ -1,8 +1,5 @@
-from uuid import UUID
-
-
 class MascotaNotFoundError(Exception):
-    def __init__(self, mascota_id: UUID) -> None:
+    def __init__(self, mascota_id: int) -> None:
         self.mascota_id = mascota_id
         super().__init__(f"No existe una mascota con el ID '{mascota_id}'.")
 

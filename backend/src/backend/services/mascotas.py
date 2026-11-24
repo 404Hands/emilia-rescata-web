@@ -1,5 +1,4 @@
 from threading import Lock
-from uuid import UUID, uuid4
 
 from backend.repositories.mascotas import (
     FotoMascota,
@@ -24,22 +23,21 @@ class MascotaService:
         with self._lock:
             return self._repository.list()
 
-    def obtener(self, mascota_id: UUID) -> Mascota:
+    def obtener(self, mascota_id: int) -> Mascota:
         mascota = self._repository.get(mascota_id)
         if mascota is None:
             raise MascotaNotFoundError(mascota_id)
         return mascota
 
     def crear(self, datos: MascotaCreate, fotos: dict[int, FotoMascota]) -> Mascota:
-        mascota = Mascota(id=uuid4(), **datos.model_dump())
         with self._lock:
-            return self._repository.add(mascota, fotos)
+            return self._repository.add(datos, fotos)
 
-    def obtener_foto(self, mascota_id: UUID, posicion: int) -> FotoMascota:
+    def obtener_foto(self, mascota_id: int, posicion: int) -> FotoMascota:
         with self._lock:
             return self._obtener_foto(mascota_id, posicion)
 
-    def _obtener_foto(self, mascota_id: UUID, posicion: int) -> FotoMascota:
+    def _obtener_foto(self, mascota_id: int, posicion: int) -> FotoMascota:
         self.obtener(mascota_id)
         foto = self._repository.get_foto(mascota_id, posicion)
         if foto is None:
@@ -47,7 +45,7 @@ class MascotaService:
         return foto
 
     def actualizar(
-        self, mascota_id: UUID, datos: MascotaUpdate, cambios: dict[int, FotoMascota | None]
+        self, mascota_id: int, datos: MascotaUpdate, cambios: dict[int, FotoMascota | None]
     ) -> Mascota:
         with self._lock:
             actualizada = self._repository.update(mascota_id, datos, cambios)
@@ -55,7 +53,7 @@ class MascotaService:
             raise MascotaNotFoundError(mascota_id)
         return actualizada
 
-    def eliminar(self, mascota_id: UUID) -> None:
+    def eliminar(self, mascota_id: int) -> None:
         with self._lock:
             if not self._repository.delete(mascota_id):
                 raise MascotaNotFoundError(mascota_id)

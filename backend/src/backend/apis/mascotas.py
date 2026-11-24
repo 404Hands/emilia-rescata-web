@@ -1,6 +1,5 @@
 from io import BytesIO
 from typing import Annotated, TypeAlias
-from uuid import UUID
 
 from fastapi import (
     APIRouter,
@@ -14,7 +13,7 @@ from fastapi import (
     status,
 )
 from PIL import Image
-from pydantic import ValidationError
+from pydantic import ValidationError, WithJsonSchema
 
 from backend.repositories.mascotas import FotoMascota
 from backend.schemas.mascotas import Mascota, MascotaCreate, MascotaUpdate
@@ -36,6 +35,16 @@ def get_mascota_service() -> MascotaService:
 
 
 ServiceDep: TypeAlias = Annotated[MascotaService, Depends(get_mascota_service)]
+MascotaId: TypeAlias = Annotated[int, Path(gt=0)]
+
+
+# Swagger muestra un editor de objeto para la parte JSON del formulario.
+# El navegador envía esa parte como texto junto con los archivos.
+ejemplo_ficha = MascotaCreate(nombre="Roco", raza="Mestizo", edad=3).model_dump()
+FichaJSON: TypeAlias = Annotated[
+    str,
+    WithJsonSchema({"type": "object", "example": ejemplo_ficha}),
+]
 
 
 def leer_foto(archivo: UploadFile, campo: str) -> FotoMascota:
@@ -66,7 +75,7 @@ def listar_mascotas(service: ServiceDep) -> list[Mascota]:
 
 
 @router.get("/{mascota_id}", response_model=Mascota, summary="Obtener ficha")
-def obtener_mascota(mascota_id: UUID, service: ServiceDep) -> Mascota:
+def obtener_mascota(mascota_id: MascotaId, service: ServiceDep) -> Mascota:
     return service.obtener(mascota_id)
 
 
@@ -78,7 +87,7 @@ def obtener_mascota(mascota_id: UUID, service: ServiceDep) -> Mascota:
 )
 def crear_mascota(
     service: ServiceDep,
-    datos: Annotated[str, Form(description="Ficha de la mascota en formato JSON")],
+    datos: Annotated[FichaJSON, Form(description="Ficha de la mascota en formato JSON")],
     foto_principal: Annotated[UploadFile, File()],
     foto_extra_1: Annotated[UploadFile | None, File()] = None,
     foto_extra_2: Annotated[UploadFile | None, File()] = None,
@@ -107,9 +116,9 @@ def crear_mascota(
     summary="Editar la ficha y sus fotos",
 )
 def actualizar_mascota(
-    mascota_id: UUID,
+    mascota_id: MascotaId,
     service: ServiceDep,
-    datos: Annotated[str, Form(description="Ficha completa en formato JSON")],
+    datos: Annotated[FichaJSON, Form(description="Ficha completa en formato JSON")],
     foto_principal: Annotated[UploadFile | None, File()] = None,
     foto_extra_1: Annotated[UploadFile | None, File()] = None,
     foto_extra_2: Annotated[UploadFile | None, File()] = None,
@@ -150,7 +159,7 @@ def actualizar_mascota(
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Eliminar mascota y sus fotos",
 )
-def eliminar_mascota(mascota_id: UUID, service: ServiceDep) -> Response:
+def eliminar_mascota(mascota_id: MascotaId, service: ServiceDep) -> Response:
     service.eliminar(mascota_id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
@@ -170,7 +179,7 @@ def eliminar_mascota(mascota_id: UUID, service: ServiceDep) -> Response:
     },
 )
 def ver_foto(
-    mascota_id: UUID,
+    mascota_id: MascotaId,
     posicion: Annotated[int, Path(ge=0, le=3)],
     service: ServiceDep,
 ) -> Response:
