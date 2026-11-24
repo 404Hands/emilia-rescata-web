@@ -20,3 +20,11 @@ import { FormularioParte3 } from './pages/formulario-parte-3/formulario-parte-3'
 import { FormularioParte4 } from './pages/formulario-parte-4/formulario-parte-4';
 import { InicioSesion } from './pages/inicio-sesion/inicio-sesion';
 import { Mascotas } from './pages/mascotas/mascotas';
+
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet],
+  templateUrl: './app.html',
+  styleUrl: './app.css'
+})
+export class App {}
