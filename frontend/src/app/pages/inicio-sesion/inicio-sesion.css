@@ -168,3 +168,15 @@ label{
         right: -100px;
     }
 }
+
+.boton-registrar{
+    background-color: #ffffff;
+    color: var(--color-login-boton);
+    border: 1px solid var(--color-login-boton);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.boton-registrar:hover{
+    background-color: var(--color-login-boton);
+    color: #ffffff;
+}

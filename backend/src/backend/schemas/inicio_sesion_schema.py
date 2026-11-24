@@ -5,8 +5,13 @@ class InicioSesion(BaseModel):
     clave: str = Field(min_length=1)
     recordar: bool = False
 
+class Registro(BaseModel):
+    nombre: str = Field(min_length=1)
+    correo: EmailStr
+    clave: str = Field(min_length=8)
+
 class Usuario(BaseModel):
-    id: int
+    id: int = 0
     nombre: str
     correo: EmailStr
     claveHash: str
