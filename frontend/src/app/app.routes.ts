@@ -1,3 +1,47 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+import { LayoutPublico } from './layouts/layout-publico/layout-publico';
+import { LayoutInicioSesion } from './layouts/layout-inicio-sesion/layout-inicio-sesion';
+
+import { Contacto } from './pages/contacto/contacto';
+import { Mascotas } from './pages/mascotas/mascotas';
+import { InicioSesion } from './pages/inicio-sesion/inicio-sesion';
+import { FormularioParte1 } from './pages/formulario-parte-1/formulario-parte-1';
+import { FormularioParte2 } from './pages/formulario-parte-2/formulario-parte-2';
+import { FormularioParte3 } from './pages/formulario-parte-3/formulario-parte-3';
+import { FormularioParte4 } from './pages/formulario-parte-4/formulario-parte-4';
+
+
+
+export const routes: Routes = [
+
+  {
+    path: '',
+    component: LayoutPublico,
+    children: [
+      { path: '', redirectTo: 'contacto', pathMatch: 'full' },
+      { path: 'contacto', component: Contacto },
+      { path: 'mascotas', component: Mascotas }
+    ]
+  },
+
+
+
+
+
+  {
+    path: 'inicio-sesion',
+    component: LayoutInicioSesion,
+    children: [
+      { path: '', component: InicioSesion }
+    ]
+  },
+
+
+  { path: 'formulario-parte-1', component: FormularioParte1 },
+  { path: 'formulario-parte-2', component: FormularioParte2 },
+  { path: 'formulario-parte-3', component: FormularioParte3 },
+  { path: 'formulario-parte-4', component: FormularioParte4 },
+
+
+];

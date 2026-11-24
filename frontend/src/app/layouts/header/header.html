@@ -1,0 +1,37 @@
+<header class="container-fluid">
+    <div class="row align-items-center">
+
+        <div class="col-6 col-lg-2 caja-logo">
+            <img src="/assets/HEADER_LOGO.png" alt="LOGO" class="logo">
+        </div>
+
+        <div class="col-6 d-lg-none text-end">
+            <button class="boton-menu" (click)="menuAbierto = !menuAbierto">
+                {{ menuAbierto ? '✕' : '☰' }}
+            </button>
+        </div>
+
+        <div class="col-12 col-lg-10 menu d-lg-block" [class.d-none]="!menuAbierto" (click)="menuAbierto = false">
+            <div class="row align-items-center">
+
+                <nav class="col-12 col-lg-8">
+                    <ul>
+                        <li><a routerLink="/inicio" routerLinkActive="activo">Inicio</a></li>
+                        <li><a routerLink="/sobre-nosotros" routerLinkActive="activo">Sobre Nosotros</a></li>
+                        <li><a routerLink="/adopciones" routerLinkActive="activo">Adopciones</a></li>
+                        <li><a routerLink="/donaciones" routerLinkActive="activo">Donaciones</a></li>
+                        <li><a routerLink="/contacto" routerLinkActive="activo">Contacto</a></li>
+                        <li><a routerLink="/mascotas" routerLinkActive="activo">Mascotas</a></li>
+                    </ul>
+                </nav>
+
+                <div class="col-12 col-lg-4 d-lg-flex botones">
+                    <button class="boton-header" routerLink="/donaciones">Quiero donar</button>
+                    <button class="boton-header" routerLink="/inicio-sesion">Iniciar Sesión</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</header>

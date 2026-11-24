@@ -1,0 +1,136 @@
+:host{
+    --color-header-fondo: #F6CCC9;
+    --color-header-letras: #3C3131;
+    --color-header-fondo-boton: #680706;
+    --color-header-letras-hover: #680706;
+    --color-header-fondo-boton-hover: #4A0504;
+}
+
+header{
+    background-color: var(--color-header-fondo);
+    position: relative;
+}
+
+.caja-logo{
+    display: flex;
+    align-items: center;
+}
+
+.logo{
+    width: 48px;
+    height: 59px;
+    transition: transform 0.3s;
+}
+
+.logo:hover{
+    transform: scale(1.05);
+}
+
+ul{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+li{
+    list-style: none;
+    padding: 0 20px;
+    line-height: 1;
+}
+
+li + li{
+    border-left: 1px solid var(--color-header-letras);
+}
+
+a{
+    display: inline-block;
+    text-decoration: none;
+    color: var(--color-header-letras);
+    transition: color 0.3s, transform 0.3s;
+}
+
+a:hover{
+    color: var(--color-header-letras-hover);
+    transform: scale(1.08);
+}
+
+.activo{
+    font-weight: bold;
+}
+
+.botones{
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+}
+
+.boton-header{
+    background-color: var(--color-header-fondo-boton);
+    color: #ffffff;
+    min-width: 145px;
+    min-height: 44px;
+    padding: 6px 15px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    white-space: nowrap;
+}
+
+.boton-menu{
+    background-color: var(--color-header-fondo-boton);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    width: 44px;
+    height: 44px;
+}
+
+.boton-header,
+.boton-menu{
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.boton-header:hover,
+.boton-menu:hover{
+    background-color: var(--color-header-fondo-boton-hover);
+    transform: scale(1.05);
+}
+
+
+
+@media (max-width: 991px){
+    .menu{
+        position: absolute;
+        top: 100%;
+        right: 10px;
+        width: 280px;
+        padding: 10px 20px 20px 20px;
+        background-color: var(--color-header-fondo);
+        border-radius: 0 0 12px 12px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+        z-index: 10;
+    }
+    ul{
+        flex-direction: column;
+    }
+    li{
+        width: 100%;
+        text-align: center;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--color-header-letras);
+    }
+    li + li{
+        border-left: none;
+    }
+    .botones{
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+    }
+}

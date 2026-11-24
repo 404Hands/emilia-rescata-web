@@ -1,0 +1,55 @@
+<main>
+    <div class="container">
+
+        <div class="caja-volver">
+            <a href="#"><i class="bi bi-arrow-left"></i></a>
+        </div>
+
+        <div class="caja-titulo">
+            <img src="/assets/HEADER_LOGO.png" alt="LOGO" class="logo">
+            <h2>Formulario de Adopción</h2>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-7">
+
+                <form class="tarjeta-formulario">
+
+                    <div class="pasos">
+                        <div class="circulo activo">1</div>
+                        <div class="linea"></div>
+                        <div class="circulo">2</div>
+                        <div class="linea"></div>
+                        <div class="circulo">3</div>
+                    </div>
+
+                    <h4 class="subtitulo">Datos Personales y Contacto</h4>
+
+                    <div class="campos">
+
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label fw-bold">Nombre y Apellido completo:</label>
+                            <input type="text" id="nombre" class="form-control" placeholder="Ej: María Pérez López" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="celular" class="form-label fw-bold">Número de Celular</label>
+                            <input type="tel" id="celular" class="form-control" placeholder="Ej: 925 178 310" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="distrito" class="form-label fw-bold">Distrito o Provincia:</label>
+                            <input type="text" id="distrito" class="form-control" placeholder="Ej: Huancayo" required>
+                        </div>
+
+                        <button type="submit" class="btn boton-siguiente w-100" routerLink="/formulario-parte-2">SIGUIENTE</button>
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</main>

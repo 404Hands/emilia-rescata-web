@@ -1,0 +1,22 @@
+:host{
+    --color-footer-fondo: #FFE7E5;
+    --color-footer-letras: #3C3131;
+}
+
+footer{
+    background-color: var(--color-footer-fondo);
+    text-align: center;
+    padding: 20px;
+}
+
+footer p{
+    color: var(--color-footer-letras);
+    font-size: 14px;
+    margin: 0;
+}
+
+@media (max-width: 767px){
+    footer p{
+        font-size: 12px;
+    }
+}
