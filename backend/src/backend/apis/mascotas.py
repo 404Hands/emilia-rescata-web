@@ -15,6 +15,7 @@ from fastapi import (
 from PIL import Image
 from pydantic import ValidationError, WithJsonSchema
 
+from .inicio_sesion_api import verificar_sesion
 from backend.repositories.mascotas import FotoMascota
 from backend.schemas.mascotas import Mascota, MascotaCreate, MascotaUpdate
 from backend.services.mascotas import MascotaService, mascota_service
@@ -83,6 +84,7 @@ def obtener_mascota(mascota_id: MascotaId, service: ServiceDep) -> Mascota:
     "",
     response_model=Mascota,
     status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(verificar_sesion)],
     summary="Registrar mascota con sus fotos",
 )
 def crear_mascota(
@@ -114,6 +116,7 @@ def crear_mascota(
     "/{mascota_id}",
     response_model=Mascota,
     summary="Editar la ficha y sus fotos",
+    dependencies=[Depends(verificar_sesion)],
 )
 def actualizar_mascota(
     mascota_id: MascotaId,
@@ -158,6 +161,7 @@ def actualizar_mascota(
     "/{mascota_id}",
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Eliminar mascota y sus fotos",
+    dependencies=[Depends(verificar_sesion)],
 )
 def eliminar_mascota(mascota_id: MascotaId, service: ServiceDep) -> Response:
     service.eliminar(mascota_id)

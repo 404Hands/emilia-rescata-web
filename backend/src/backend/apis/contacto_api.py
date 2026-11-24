@@ -1,4 +1,5 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
+from .inicio_sesion_api import verificar_sesion
 from ..services.contacto_services import ContactoServicio
 from ..schemas.contacto_schema import Contacto
 
@@ -13,11 +14,11 @@ def guardarContacto(contactoNuevo: Contacto):
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-@rutasContacto.get('/')
+@rutasContacto.get('/', dependencies=[Depends(verificar_sesion)])
 def mostrarContactos():
     return ContactoServicio.mostrarContactos()
 
-@rutasContacto.delete('/{id}')
+@rutasContacto.delete('/{id}', dependencies=[Depends(verificar_sesion)])
 def eliminarContacto(id: int):
     try:
         return ContactoServicio.eliminarContacto(id)
