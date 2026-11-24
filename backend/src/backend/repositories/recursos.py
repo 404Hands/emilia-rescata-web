@@ -1,8 +1,7 @@
 from fractions import Fraction
-from uuid import UUID
 from threading import Lock
 
-from backend.schemas.recursos import Ingreso, Producto, ProductoConIngreso, ProductoId
+from backend.schemas.recursos import Ingreso, IngresoDatos, Producto, ProductoConIngreso, ProductoId
 
 
 class StockInsuficienteError(Exception):
@@ -20,7 +19,8 @@ class SaldoFueraDeRangoError(Exception):
 class RecursoRepository:
     def __init__(self) -> None:
         self._lock = Lock()
-        self._ingresos: dict[UUID, Ingreso] = {}
+        self._ingresos: dict[int, Ingreso] = {}
+        self._siguiente_ingreso_id = 1
 
         productos = [
             Producto(
@@ -126,14 +126,16 @@ class RecursoRepository:
             self._aplicar({clave: Fraction(-1)})
             return self._productos[clave]
 
-    def crear_ingreso(self, ingreso: Ingreso) -> ProductoConIngreso:
+    def crear_ingreso(self, datos: IngresoDatos) -> ProductoConIngreso:
         with self._lock:
+            ingreso = Ingreso(ingreso_id=self._siguiente_ingreso_id, **datos.model_dump())
             self._aplicar({ingreso.productoId: self._envases(ingreso)})
             self._ingresos[ingreso.ingreso_id] = ingreso
+            self._siguiente_ingreso_id += 1
             producto = self._productos[ingreso.productoId]
             return ProductoConIngreso(**producto.model_dump(), ingreso_id=ingreso.ingreso_id)
 
-    def _buscar_ingreso(self, ingreso_id: UUID) -> Ingreso:
+    def _buscar_ingreso(self, ingreso_id: int) -> Ingreso:
         anterior = self._ingresos.get(ingreso_id)
         if anterior is None:
             raise IngresoNoEncontradoError("El ingreso solicitado no existe.")
@@ -148,7 +150,7 @@ class RecursoRepository:
             self._ingresos[nuevo.ingreso_id] = nuevo
             return nuevo
 
-    def eliminar_ingreso(self, ingreso_id: UUID) -> None:
+    def eliminar_ingreso(self, ingreso_id: int) -> None:
         with self._lock:
             anterior = self._buscar_ingreso(ingreso_id)
             self._aplicar({anterior.productoId: -self._envases(anterior)})
